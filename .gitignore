@@ -1,5 +1,17 @@
+# Python
+venv/
 __pycache__/
-.env
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.env  # Nếu có API key
+
+# Data/Output (không commit file lớn)
+data/processed/
+chroma_db/  # Vector store local từ Chroma
+
+# Misc
+.DS_Store
 *.log
-data/raw_pdfs/*
-!data/raw_pdfs/.gitkeep

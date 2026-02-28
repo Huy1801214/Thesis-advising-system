@@ -10,6 +10,7 @@ __pycache__/
 services/rag_baseline/.env
 chroma_hierarchical/
 chroma_flat/
+parent_map.json
 
 # Data/Output (không commit file lớn)
 data/processed/

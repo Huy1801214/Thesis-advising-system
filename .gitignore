@@ -6,7 +6,10 @@ __pycache__/
 *.pyd
 .Python
 *.egg-info/
-.env  # Nếu có API key
+.env
+services/rag_baseline/.env
+chroma_hierarchical/
+chroma_flat/
 
 # Data/Output (không commit file lớn)
 data/processed/

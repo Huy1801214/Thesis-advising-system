@@ -1,0 +1,843 @@
+{
+  "courses": [
+    {
+      "ma_hp": "200101",
+      "ten_hp": "Triết học Mác Lênin",
+      "search_name": "triết học mác lênin",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202108",
+      "ten_hp": "Toán cao cấp A1",
+      "search_name": "toán cao cấp a1",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202109",
+      "ten_hp": "Toán cao cấp A2",
+      "search_name": "toán cao cấp a2",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202206",
+      "ten_hp": "Vật lý 2",
+      "search_name": "vật lý 2",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202501",
+      "ten_hp": "Giáo dục thể chất 1",
+      "search_name": "giáo dục thể chất 1",
+      "so_tc": 1,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "213603",
+      "ten_hp": "Anh văn 1",
+      "search_name": "anh văn 1",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "214202",
+      "ten_hp": "Nhập môn công nghệ thông tin",
+      "search_name": "nhập môn công nghệ thông tin",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "200102",
+      "ten_hp": "Kinh tế chính trị Mác- Lênin",
+      "search_name": "kinh tế chính trị mác- lênin",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "200201",
+      "ten_hp": "Quân sự 1 (lý thuyết)",
+      "search_name": "quân sự 1 (lý thuyết)",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "200202",
+      "ten_hp": "Quân sự 2 (thực hành)",
+      "search_name": "quân sự 2 (thực hành)",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "202110",
+      "ten_hp": "Toán cao cấp A3",
+      "search_name": "toán cao cấp a3",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202502",
+      "ten_hp": "Giáo dục thể chất 2",
+      "search_name": "giáo dục thể chất 2",
+      "so_tc": 1,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "213604",
+      "ten_hp": "Anh văn 2",
+      "search_name": "anh văn 2",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": true
+    },
+    {
+      "ma_hp": "200103",
+      "ten_hp": "Chủ nghĩa xã hội khoa học",
+      "search_name": "chủ nghĩa xã hội khoa học",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202121",
+      "ten_hp": "Xác suất thống kê",
+      "search_name": "xác suất thống kê",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202622",
+      "ten_hp": "Pháp luật đại cương",
+      "search_name": "pháp luật đại cương",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214389",
+      "ten_hp": "Toán rời rạc",
+      "search_name": "toán rời rạc",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "200107",
+      "ten_hp": "Tư tưởng Hồ Chí Minh",
+      "search_name": "tư tưởng hồ chí minh",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "200105",
+      "ten_hp": "Lịch sử Đảng Cộng sản Việt Nam",
+      "search_name": "lịch sử đảng cộng sản việt nam",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "202620",
+      "ten_hp": "Kỹ năng giao tiếp",
+      "search_name": "kỹ năng giao tiếp",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "208453",
+      "ten_hp": "Marketing căn bản",
+      "search_name": "marketing căn bản",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214321",
+      "ten_hp": "Lập trình cơ bản",
+      "search_name": "lập trình cơ bản",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214231",
+      "ten_hp": "Cấu trúc máy tính",
+      "search_name": "cấu trúc máy tính",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214294",
+      "ten_hp": "Hệ điều hành",
+      "search_name": "hệ điều hành",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214331",
+      "ten_hp": "Lập trình nâng cao",
+      "search_name": "lập trình nâng cao",
+      "so_tc": 4,
+      "is_core": true,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214362",
+      "ten_hp": "Giao tiếp người-máy",
+      "search_name": "giao tiếp người-máy",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214441",
+      "ten_hp": "Cấu trúc dữ liệu",
+      "search_name": "cấu trúc dữ liệu",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214241",
+      "ten_hp": "Mạng máy tính cơ bản",
+      "search_name": "mạng máy tính cơ bản",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214352",
+      "ten_hp": "Thiết kế hướng đối tượng",
+      "search_name": "thiết kế hướng đối tượng",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214354",
+      "ten_hp": "Lý thuyết đồ thị",
+      "search_name": "lý thuyết đồ thị",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214442",
+      "ten_hp": "Nhập môn cơ sở dữ liệu",
+      "search_name": "nhập môn cơ sở dữ liệu",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214990",
+      "ten_hp": "Phương pháp nghiên cứu khoa học",
+      "search_name": "phương pháp nghiên cứu khoa học",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214252",
+      "ten_hp": "Lập trình mạng",
+      "search_name": "lập trình mạng",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214390",
+      "ten_hp": "Lập trình Python",
+      "search_name": "lập trình python",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214462",
+      "ten_hp": "Lập trình Web",
+      "search_name": "lập trình web",
+      "so_tc": 4,
+      "is_core": true,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214463",
+      "ten_hp": "Nhập môn trí tuệ nhân tạo",
+      "search_name": "nhập môn trí tuệ nhân tạo",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214274",
+      "ten_hp": "Lập trình trên thiết bị di động",
+      "search_name": "lập trình trên thiết bị di động",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214370",
+      "ten_hp": "Nhập môn công nghệ phần mềm",
+      "search_name": "nhập môn công nghệ phần mềm",
+      "so_tc": 4,
+      "is_core": true,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214461",
+      "ten_hp": "Phân tích và thiết kế hệ thống thông tin",
+      "search_name": "phân tích và thiết kế hệ thống thông tin",
+      "so_tc": 4,
+      "is_core": true,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214492",
+      "ten_hp": "Máy học",
+      "search_name": "máy học",
+      "so_tc": 4,
+      "is_core": true,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214282",
+      "ten_hp": "Mạng máy tính nâng cao",
+      "search_name": "mạng máy tính nâng cao",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214372",
+      "ten_hp": "Lập trình .NET",
+      "search_name": "lập trình .net",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214386",
+      "ten_hp": "Lập trình PHP",
+      "search_name": "lập trình php",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214271",
+      "ten_hp": "Quản trị mạng",
+      "search_name": "quản trị mạng",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214353",
+      "ten_hp": "Đồ họa máy tính",
+      "search_name": "đồ họa máy tính",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214451",
+      "ten_hp": "Hệ quản trị cơ sở dữ liệu",
+      "search_name": "hệ quản trị cơ sở dữ liệu",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214464",
+      "ten_hp": "An toàn và bảo mật hệ thống thông tin",
+      "search_name": "an toàn và bảo mật hệ thống thông tin",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214465",
+      "ten_hp": "Hệ thống thông tin địa lý ứng dụng",
+      "search_name": "hệ thống thông tin địa lý ứng dụng",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214493",
+      "ten_hp": "Thực tập lập trình Web",
+      "search_name": "thực tập lập trình web",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214273",
+      "ten_hp": "Lập trình mạng nâng cao",
+      "search_name": "lập trình mạng nâng cao",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214291",
+      "ten_hp": "Xử lý ảnh và thị giác máy tính",
+      "search_name": "xử lý ảnh và thị giác máy tính",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214379",
+      "ten_hp": "Đảm bảo chất lượng và kiểm thử phần mềm",
+      "search_name": "đảm bảo chất lượng và kiểm thử phần mềm",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214388",
+      "ten_hp": "Lập trình Front End",
+      "search_name": "lập trình front end",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214485",
+      "ten_hp": "Data Mining",
+      "search_name": "data mining",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214490",
+      "ten_hp": "Phân tích dữ liệu lớn",
+      "search_name": "phân tích dữ liệu lớn",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214292",
+      "ten_hp": "An ninh mạng",
+      "search_name": "an ninh mạng",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214293",
+      "ten_hp": "Thực tập lập trình trên thiết bị di động",
+      "search_name": "thực tập lập trình trên thiết bị di động",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214383",
+      "ten_hp": "Quản lý dự án phần mềm",
+      "search_name": "quản lý dự án phần mềm",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214491",
+      "ten_hp": "Data Warehouse",
+      "search_name": "data warehouse",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214290",
+      "ten_hp": "IoT",
+      "search_name": "iot",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214471",
+      "ten_hp": "Hệ thống thông tin quản lý",
+      "search_name": "hệ thống thông tin quản lý",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214483",
+      "ten_hp": "Thương mại điện tử",
+      "search_name": "thương mại điện tử",
+      "so_tc": 3,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214286",
+      "ten_hp": "Chuyên đề Java",
+      "search_name": "chuyên đề java",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214374",
+      "ten_hp": "Chuyên đề WEB",
+      "search_name": "chuyên đề web",
+      "so_tc": 4,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214984",
+      "ten_hp": "Đồ án chuyên ngành",
+      "search_name": "đồ án chuyên ngành",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214987",
+      "ten_hp": "Khóa luận tốt nghiệp",
+      "search_name": "khóa luận tốt nghiệp",
+      "so_tc": 12,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214988",
+      "ten_hp": "Tiểu luận tốt nghiệp",
+      "search_name": "tiểu luận tốt nghiệp",
+      "so_tc": 6,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214989",
+      "ten_hp": "Khởi nghiệp",
+      "search_name": "khởi nghiệp",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    },
+    {
+      "ma_hp": "214991",
+      "ten_hp": "Thực tập doanh nghiệp",
+      "search_name": "thực tập doanh nghiệp",
+      "so_tc": 2,
+      "is_core": false,
+      "is_conditional": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "200102",
+      "to": "200101",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "200103",
+      "to": "200102",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "202121",
+      "to": "202110",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "200107",
+      "to": "200103",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "200105",
+      "to": "200107",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214294",
+      "to": "214202",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214331",
+      "to": "214321",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214362",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214441",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214352",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214354",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214990",
+      "to": "214441",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214990",
+      "to": "202121",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214252",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214252",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214252",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214390",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214462",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214462",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214463",
+      "to": "214441",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214274",
+      "to": "214252",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214370",
+      "to": "214352",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214461",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214461",
+      "to": "214352",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214492",
+      "to": "202121",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214492",
+      "to": "214390",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214282",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214282",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214372",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214372",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214386",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214386",
+      "to": "214331",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214271",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214353",
+      "to": "214441",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214451",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214464",
+      "to": "214462",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214465",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214493",
+      "to": "214462",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214273",
+      "to": "214252",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214291",
+      "to": "214492",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214379",
+      "to": "214370",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214388",
+      "to": "214462",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214485",
+      "to": "214492",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214485",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214490",
+      "to": "214492",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214292",
+      "to": "214241",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214293",
+      "to": "214274",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214383",
+      "to": "214370",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214491",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214290",
+      "to": "214252",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214471",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214483",
+      "to": "214462",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214483",
+      "to": "214442",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214286",
+      "to": "214441",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214286",
+      "to": "214352",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214374",
+      "to": "214462",
+      "type": "PREREQUISITE"
+    },
+    {
+      "from": "214991",
+      "to": "214370",
+      "type": "PREREQUISITE"
+    }
+  ]
+}

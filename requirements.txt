@@ -1,5 +1,34 @@
+# --- Web & Infrastructure ---
+fastapi
+uvicorn
+celery
+redis
+pydantic
+python-dotenv
+Query
+python-multipart
+
+# --- Security & Auth ---
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+
+# --- Database (SQLAlchemy + Postgres) ---
+sqlalchemy
+psycopg2-binary
+
+# --- Agentic AI & LLM ---
 langchain
+langchain-google-genai
 langchain-community
-langchain-chroma
-langchain-text-splitters
+langchain-huggingface
 sentence-transformers
+langchain-qdrant
+
+# --- Database Clients ---
+qdrant-client
+neo4j
+
+# --- Frontend & Testing ---
+streamlit
+locust

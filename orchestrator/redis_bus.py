@@ -1,5 +1,6 @@
 import redis
 import json
+from typing import Any
 
 class BlackboardBus:
     def __init__(self):
@@ -11,6 +12,15 @@ class BlackboardBus:
         status = self.client.get(f"status:{task_id}")
         return status.decode() if status else "PENDING"
 
-    def get_task_result(self, task_id: str):
-        result = self.client.get(f"result:{task_id}")
-        return json.loads(result) if result else None
+    def get_task_result(self, session_id: str, task_id: str):
+            # Key phải khớp với cách Worker ghi vào: result:{session_id}:{task_id}
+            key = f"result:{session_id}:{task_id}"
+            result = self.client.get(key)
+            
+            if result:
+                return json.loads(result)
+            return None
+    
+    def set_result(self, session_id: str, task_id: str, data: Any):
+        key = f"result:{session_id}:{task_id}"
+        self.client.set(key, json.dumps(data), ex=3600)

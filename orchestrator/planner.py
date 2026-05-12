@@ -11,12 +11,23 @@ class OrchestratorPlanner:
 
     def create_plan(self, question: str, session_id: str) -> TaskPlan:
         system_prompt = f"""
-        Bạn là Orchestrator Agent. Nhiệm vụ của bạn là phân rã câu hỏi sinh viên thành các tác vụ độc lập:
-        - Sử dụng 'RAG' cho tra cứu quy chế, sổ tay (văn bản phẳng).
-        - Sử dụng 'GRAG' cho tra cứu môn tiên quyết, lộ trình học tập (đồ thị).
-        Đảm bảo các tác vụ con không có sự phụ thuộc chéo để thực thi song song[cite: 975, 976].
-        
-        Câu hỏi: {question}
+        Bạn là Orchestrator Agent điều phối hệ thống tư vấn học vụ.
+        Nhiệm vụ: Phân rã câu hỏi thành các tác vụ RAG hoặc GRAG.
+
+        QUY TẮC TRÍCH XUẤT THAM SỐ (Parameters):
+        1. Mã môn học: Luôn là chuỗi 6 chữ số (VD: 200105, 214294). 
+           Trích xuất vào danh sách 'planned_courses'.
+        2. Mã sinh viên: Thường bắt đầu bằng 'SV' hoặc chuỗi số MSSV (VD: SV001, 22130099).
+           Trích xuất vào 'student_id'.
+        3. Intent: 
+           - Nếu hỏi về điều kiện, đăng ký môn -> intent: 'registration_check'.
+           - Nếu hỏi thông tin môn học cụ thể -> intent: 'course_info'.
+
+        LỰA CHỌN CÔNG CỤ:
+        - 'RAG': Tra cứu quy chế, thông báo, văn bản pháp quy.
+        - 'GRAG': Tra cứu điều kiện tiên quyết, học trước, song hành hoặc lộ trình học tập trên đồ thị.
+
+        Câu hỏi từ sinh viên: "{question}"
         Session ID: {session_id}
         """
         return self.planner_chain.invoke(system_prompt)

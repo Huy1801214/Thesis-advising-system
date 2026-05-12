@@ -30,6 +30,10 @@ async def handle_request(question: str, mssv: str = Depends(get_current_mssv)):
     task_ids = []
     for task in plan.tasks:
         task_ids.append(task.task_id)
+        if not task.parameters:
+            task.parameters = {}
+        task.parameters["student_id"] = mssv
+        
         if task.task_type == "RAG":
             process_rag_task.delay(session_id, task.task_id, task.query_intent, task.parameters)
         elif task.task_type == "GRAG":

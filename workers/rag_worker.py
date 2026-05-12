@@ -1,4 +1,3 @@
-# workers/rag_engine.py
 import os
 from langchain_qdrant import QdrantVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -19,7 +18,6 @@ Nếu không có thông tin trong ngữ cảnh, hãy nói đúng câu: "Tôi ch�
 class RAGEngine:
     def __init__(self):
         self.embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large")
-        # Kết nối Qdrant thực tế (thay vì :memory: của notebook)
         self.vectorstore = QdrantVectorStore.from_existing_collection(
             embedding=self.embeddings,
             collection_name="nlu_academic_rules",
@@ -28,7 +26,7 @@ class RAGEngine:
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_retries=5)
 
     def search_and_answer(self, query: str):
-        # 1. Retrieval (Logic từ notebook)
+        # 1. Retrieval 
         docs = self.vectorstore.similarity_search(query, k=4)
         context_blocks = []
         for d in docs:
@@ -39,7 +37,7 @@ class RAGEngine:
         
         context = "\n\n".join(context_blocks)
         
-        # 2. Generation (Prompt từ notebook)
+        # 2. Generation 
         prompt = PROMPT_TEMPLATE.format(context=context, question=query)
         resp = self.llm.invoke(prompt)
         return resp.content

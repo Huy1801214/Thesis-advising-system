@@ -17,16 +17,19 @@ Nếu không có thông tin trong ngữ cảnh, hãy nói đúng câu: "Tôi ch�
 
 class RAGEngine:
     def __init__(self):
-        self.embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large")
+        self.vector_url = os.getenv("QDRANT_URL", "http://nlu_vector_db:6333")
+        self.embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large", cache_folder="./hf_cache")
         self.vectorstore = QdrantVectorStore.from_existing_collection(
             embedding=self.embeddings,
             collection_name="nlu_academic_rules",
-            url="http://localhost:6333" 
+            url=self.vector_url
         )
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_retries=5)
 
     def search_and_answer(self, query: str):
+        print(f"--- [Worker] Đang xử lý câu hỏi: {query}")
         # 1. Retrieval 
+        print("--- [Worker] 1. Đang tính toán Vector (Embedding)...")
         docs = self.vectorstore.similarity_search(query, k=4)
         context_blocks = []
         for d in docs:
@@ -38,6 +41,8 @@ class RAGEngine:
         context = "\n\n".join(context_blocks)
         
         # 2. Generation 
+        print("--- [Worker] 3. Đang gửi prompt sang Gemini...")
         prompt = PROMPT_TEMPLATE.format(context=context, question=query)
         resp = self.llm.invoke(prompt)
+        print("--- [Worker] 4. Đã nhận phản hồi từ Gemini.")
         return resp.content

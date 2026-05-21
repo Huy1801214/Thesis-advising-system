@@ -1,12 +1,11 @@
 # --- Web & Infrastructure ---
 fastapi
 uvicorn
-celery
-redis
 pydantic
 python-dotenv
 Query
 python-multipart
+email-validator>=2.0.0
 
 # --- Security & Auth ---
 python-jose[cryptography]

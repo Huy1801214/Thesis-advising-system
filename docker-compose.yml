@@ -1,24 +1,61 @@
 services:
-  # 1. Redis: Message Broker (Broker) và State Store (Whiteboard) [cite: 630-635]
-  redis:
-    image: redis:7-alpine
-    container_name: nlu_redis_bus
-    ports:
-      - "6379:6379"
-
-  # 2. Qdrant: Cơ sở dữ liệu Vector cho RAG Agent [cite: 643]
+  # 1. Qdrant
   qdrant:
     image: qdrant/qdrant
     container_name: nlu_vector_db
     ports:
-      - "6333:6333"
+      - "16333:6333"
+    restart: always
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
 
-  # 3. Neo4j: Cơ sở dữ liệu Đồ thị cho GRAG Agent [cite: 644]
+  # 2. Neo4j
   neo4j:
     image: neo4j:latest
     container_name: nlu_graph_db
     environment:
-      - NEO4J_AUTH=neo4j/password # Huy nhớ đổi password này cho khớp với code nhé
+      - NEO4J_AUTH=neo4j/khoaluan 
     ports:
       - "7474:7474"
       - "7687:7687"
+    restart: always
+
+  # 3. Postgres
+  db-postgres:
+    image: postgres:15
+    container_name: nlu_user_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "1"
+      POSTGRES_DB: thesis_advising_db  
+    ports:
+      - "5432:5432"
+    restart: always
+
+  # 4. Backend: Orchestrator + AI Agents (Gộp chung)
+  backend:
+    build: .
+    container_name: thesis_backend
+    command: uvicorn orchestrator.main:app --host 0.0.0.0 --port 8000
+    restart: on-failure 
+    volumes:
+      - .:/app
+      - ./hf_cache:/root/.cache/huggingface
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-postgres
+      - neo4j
+      - qdrant
+    env_file: .env
+
+  # 5. Frontend
+  frontend:
+    build: .
+    container_name: chatbot_frontend
+    command: streamlit run frontend/chatapp.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    restart: always

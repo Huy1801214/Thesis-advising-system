@@ -6,6 +6,7 @@ python-dotenv
 Query
 python-multipart
 email-validator>=2.0.0
+fastembed
 
 # --- Security & Auth ---
 python-jose[cryptography]

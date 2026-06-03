@@ -49,6 +49,8 @@ class Neo4jSeeder:
         MERGE (c:Course {code: row.code})
         SET c.name = row.name,
             c.credits = row.credits,
+            c.theory_credits = row.theory_credits,      
+            c.practice_credits = row.practice_credits,
             c.year = row.year,
             c.semester = row.semester,
             c.is_core_A = row.is_core_A,
@@ -60,6 +62,8 @@ class Neo4jSeeder:
             "code": s["course_code"],
             "name": s["course_name"],
             "credits": s["credits"]["total"],
+            "theory_credits": s["credits"].get("lt", 0),   
+            "practice_credits": s["credits"].get("th", 0),
             "year": s["curriculum_position"]["year"],
             "semester": s["curriculum_position"]["semester"],
             "is_core_A": s["classification"]["is_core_A"],

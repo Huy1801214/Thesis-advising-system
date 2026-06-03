@@ -7,7 +7,7 @@ Query
 python-multipart
 email-validator>=2.0.0
 fastembed
-
+openpyxl
 # --- Security & Auth ---
 python-jose[cryptography]
 passlib[bcrypt]

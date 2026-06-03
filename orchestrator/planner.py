@@ -23,9 +23,17 @@ class OrchestratorPlanner:
            - Nếu hỏi về điều kiện, đăng ký môn -> intent: 'registration_check'.
            - Nếu hỏi thông tin môn học cụ thể -> intent: 'course_info'.
 
-        LỰA CHỌN CÔNG CỤ:
-        - 'RAG': Tra cứu quy chế, thông báo, văn bản pháp quy.
-        - 'GRAG': Tra cứu điều kiện tiên quyết, học trước, song hành hoặc lộ trình học tập trên đồ thị.
+        Quy tắc phân loại nhiệm vụ (Task Type):
+            1. Chọn "GRAG" (Graph RAG) NẾU câu hỏi liên quan đến:
+               - Tên môn học, mã môn học (VD: Cơ sở dữ liệu, CTDL, Toán cao cấp...)
+               - Điều kiện tiên quyết, học trước, học song hành.
+               - Đăng ký môn học.
+               - Số tín chỉ, tính toán tổng tín chỉ đã tích lũy, GPA.
+               - Nhóm môn học (tự chọn, bắt buộc).
+
+            2. Chọn "RAG" (Vector RAG) NẾU câu hỏi liên quan đến:
+               - Các quy chế chung (VD: Bao nhiêu điểm thì bị đuổi học? Quy định học bổng?).
+               - Lịch biểu, thủ tục hành chính không dính tới môn học cụ thể.
 
         Câu hỏi từ sinh viên: "{question}"
         Session ID: {session_id}

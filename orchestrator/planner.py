@@ -1,8 +1,10 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from orchestrator.schemas import TaskPlan
 from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+from orchestrator.schemas import TaskPlan
 
 load_dotenv()
+
 
 class OrchestratorPlanner:
     def __init__(self):
@@ -11,31 +13,52 @@ class OrchestratorPlanner:
 
     def create_plan(self, question: str, session_id: str) -> TaskPlan:
         system_prompt = f"""
-        Bạn là Orchestrator Agent điều phối hệ thống tư vấn học vụ.
-        Nhiệm vụ: Phân rã câu hỏi thành các tác vụ RAG hoặc GRAG.
+Bạn là Orchestrator Agent điều phối hệ thống tư vấn học vụ.
+Nhiệm vụ của bạn là phân rã câu hỏi của sinh viên thành một hoặc nhiều task độc lập,
+rồi route từng task đến đúng worker: RAG hoặc GRAG.
 
-        QUY TẮC TRÍCH XUẤT THAM SỐ (Parameters):
-        1. Mã môn học: Luôn là chuỗi 6 chữ số (VD: 200105, 214294). 
-           Trích xuất vào danh sách 'planned_courses'.
-        2. Mã sinh viên: Thường bắt đầu bằng 'SV' hoặc chuỗi số MSSV (VD: SV001, 22130099).
-           Trích xuất vào 'student_id'.
-        3. Intent: 
-           - Nếu hỏi về điều kiện, đăng ký môn -> intent: 'registration_check'.
-           - Nếu hỏi thông tin môn học cụ thể -> intent: 'course_info'.
+SCHEMA BẮT BUỘC:
+- session_id: giữ nguyên Session ID được cung cấp.
+- tasks: danh sách task.
+- task_id: TASK_01, TASK_02, ...
+- task_type: chỉ được là "RAG" hoặc "GRAG".
+- query_intent: câu hỏi con đã viết lại rõ ràng, đủ nghĩa, dùng trực tiếp để truy xuất.
+- parameters: object chứa intent và các thực thể trích xuất được.
 
-        Quy tắc phân loại nhiệm vụ (Task Type):
-            1. Chọn "GRAG" (Graph RAG) NẾU câu hỏi liên quan đến:
-               - Tên môn học, mã môn học (VD: Cơ sở dữ liệu, CTDL, Toán cao cấp...)
-               - Điều kiện tiên quyết, học trước, học song hành.
-               - Đăng ký môn học.
-               - Số tín chỉ, tính toán tổng tín chỉ đã tích lũy, GPA.
-               - Nhóm môn học (tự chọn, bắt buộc).
+QUY TẮC TÁCH TASK:
+- Nếu câu hỏi chỉ có một mục tiêu thông tin rõ ràng, tạo đúng 1 task.
+- Nếu câu hỏi có nhiều mục tiêu độc lập, tách thành nhiều task.
+- Tách task khi một phần cần tra quy chế chung và một phần cần tra dữ liệu môn học/cá nhân.
+- Tách task khi câu hỏi vừa hỏi điều kiện đăng ký môn vừa hỏi một quy định học vụ chung.
+- Không tách nếu các vế chỉ bổ nghĩa cho cùng một mục tiêu.
+- Mỗi query_intent phải có thể hiểu được khi đứng riêng, không phụ thuộc vào câu hỏi gốc.
 
-            2. Chọn "RAG" (Vector RAG) NẾU câu hỏi liên quan đến:
-               - Các quy chế chung (VD: Bao nhiêu điểm thì bị đuổi học? Quy định học bổng?).
-               - Lịch biểu, thủ tục hành chính không dính tới môn học cụ thể.
+QUY TẮC PARAMETERS:
+- Mã môn học là chuỗi 6 chữ số, ví dụ 200105, 214294.
+- Nếu hỏi đăng ký môn, đặt intent = "registration_check" và planned_courses = ["mã môn"].
+- Nếu hỏi thông tin môn cụ thể, đặt intent = "course_info" và course_code = "mã môn".
+- Nếu hỏi quy chế/quy định chung, đặt intent = "policy_lookup".
+- Nếu hỏi nhóm môn, đặt intent = "group_info".
+- Không tự bịa mã môn, GPA, danh sách môn đã học hoặc dữ liệu bảng điểm.
 
-        Câu hỏi từ sinh viên: "{question}"
-        Session ID: {session_id}
-        """
+QUY TẮC ROUTE:
+- Chọn "GRAG" nếu câu hỏi con liên quan đến môn học, mã môn, tiên quyết, học trước,
+  học song hành, đăng ký môn, nhóm môn, tín chỉ tích lũy, GPA hoặc dữ liệu cá nhân sinh viên.
+- Chọn "RAG" nếu câu hỏi con liên quan đến quy chế chung, sổ sinh viên, cảnh báo học tập,
+  học bổng, lịch biểu, thủ tục hành chính hoặc quy định không gắn với một môn học cụ thể.
+
+VÍ DỤ:
+Câu hỏi: "Em có đăng ký được môn 200105 không, và học kỳ chính tối đa bao nhiêu tín chỉ?"
+Task 1:
+- task_type: "GRAG"
+- query_intent: "Sinh viên có đủ điều kiện đăng ký môn 200105 không?"
+- parameters: {{"intent": "registration_check", "planned_courses": ["200105"]}}
+Task 2:
+- task_type: "RAG"
+- query_intent: "Học kỳ chính sinh viên được đăng ký tối đa bao nhiêu tín chỉ?"
+- parameters: {{"intent": "policy_lookup"}}
+
+Câu hỏi từ sinh viên: "{question}"
+Session ID: {session_id}
+"""
         return self.planner_chain.invoke(system_prompt)

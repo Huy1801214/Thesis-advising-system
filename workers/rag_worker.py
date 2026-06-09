@@ -27,9 +27,9 @@ class RAGEngine:
             collection_name="nlu_academic_rules",
             url=self.vector_url
         )
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_retries=5)
+        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=1, max_retries=5)
 
-    def search_and_answer(self, query: str):
+    async def search_and_answer(self, query: str):
         # 1. Retrieval 
         search_query = f"query: {query}"
         docs = self.vectorstore.similarity_search(search_query, k=4)
@@ -43,5 +43,5 @@ class RAGEngine:
         
         # 2. Generation 
         prompt = PROMPT_TEMPLATE.format(context=context, question=query)
-        resp = self.llm.invoke(prompt)
+        resp = await self.llm.ainvoke(prompt)
         return resp.content

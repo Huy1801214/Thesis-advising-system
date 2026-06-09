@@ -1,6 +1,6 @@
 import os 
 from pathlib import Path
-from neo4j import GraphDatabase, basic_auth
+from neo4j import AsyncGraphDatabase, basic_auth
 from dotenv import load_dotenv 
 
 env_path = Path(__file__).resolve().parent.parent / '.env'
@@ -12,15 +12,18 @@ class GragDBManager:
         self.user = os.getenv("NEO4J_USER")
         self.password = os.getenv("NEO4J_PASSWORD")
         self.database = os.getenv("NEO4J_DATABASE", "neo4j")
-        self.driver = GraphDatabase.driver(self.uri, auth=basic_auth(self.user, self.password))
+        self.driver = AsyncGraphDatabase.driver(self.uri, auth=basic_auth(self.user, self.password))
 
-    def close(self):
+    async def close(self):
         self.driver.close()
     
-    def run_query(self, cypher: str, params: dict = None):
-        with self.driver.session(database=self.database) as session:
-            result = session.run(cypher, params or {})
-            return [dict(r) for r in result]
+    async def run_query_async(self, query: str, parameters: dict = None):
+            if parameters is None:
+                parameters = {}
+            async with self.driver.session() as session:
+                result = await session.run(query, parameters)
+                records = await result.data()
+                return records
         
 graph_db = GragDBManager()
 

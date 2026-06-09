@@ -51,11 +51,13 @@ services:
 
   # 5. Frontend
   frontend:
-    build: .
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
     container_name: chatbot_frontend
-    command: streamlit run frontend/chatapp.py --server.port 8501 --server.address 0.0.0.0
     ports:
-      - "8501:8501"
+      - "8501:80"
     depends_on:
       - backend
     restart: always

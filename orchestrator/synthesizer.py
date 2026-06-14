@@ -11,7 +11,7 @@ class FinalSynthesizer:
     def __init__(self):
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
 
-    def synthesize(self, original_question: str, trace: List[Dict[str, Any]]) -> str:
+    async def synthesize(self, original_question: str, trace: List[Dict[str, Any]]) -> str:
         prompt = f"""
 Bạn là bộ tổng hợp câu trả lời cuối cùng cho hệ thống tư vấn học vụ.
 
@@ -28,5 +28,5 @@ Câu hỏi gốc:
 Kết quả trung gian:
 {json.dumps(trace, ensure_ascii=False, indent=2)}
 """
-        response = self.llm.invoke(prompt)
+        response = await self.llm.ainvoke(prompt)
         return response.content

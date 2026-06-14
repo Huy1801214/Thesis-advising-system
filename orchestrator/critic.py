@@ -14,7 +14,7 @@ class CriticAgent:
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
         self.critic_chain = self.llm.with_structured_output(CriticReport)
 
-    def review(
+    async def review(
         self,
         original_question: str,
         final_answer: str,
@@ -63,7 +63,7 @@ trace:
 final_answer:
 {final_answer}
 """
-        return self.critic_chain.invoke(prompt)
+        return await self.critic_chain.ainvoke(prompt)
 
 
 def fallback_critic_report(error: str = "critic_unavailable") -> CriticReport:

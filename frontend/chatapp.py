@@ -8,6 +8,8 @@ st.title("🎓 Hệ thống Tư vấn Khóa luận")
 
 if "token" not in st.session_state:
     st.session_state.token = None
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 if not st.session_state.token:
     with st.form("login_form"):
@@ -72,15 +74,20 @@ else:
         st.markdown("---")
         if st.button("Đăng xuất", type="primary", use_container_width=True):
             st.session_state.token = None
+            st.session_state.messages = []
             st.rerun()
 
     # --- KHUNG CHAT CHÍNH ---
     # (Khuyên dùng: Nên lưu lịch sử chat vào st.session_state.messages để không bị mất khi ấn nút)
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
     if prompt := st.chat_input("Hỏi tôi về khóa luận, đăng ký tín chỉ..."):
         st.chat_message("user").markdown(prompt)
         
         # Đợi hệ thống xử lý (Loading spinner)
-        with st.spinner("🤖 AI đang suy nghĩ và truy xuất đồ thị kiến thức..."):
+        with st.spinner("🤖 Orchestrator đang phân rã tác vụ và truy xuất đồ thị..."):
             try:
                 res_chat = requests.post(
                     f"{BACKEND_URL}/chat", 
@@ -90,15 +97,30 @@ else:
                 
                 if res_chat.status_code == 200:
                     data = res_chat.json()
-                    results = data.get("data", [])
                     
-                    if results:
-                        with st.chat_message("assistant"):
-                            st.markdown("### 💡 Phản hồi từ Hệ thống:")
-                            for idx, res in enumerate(results):
-                                # Trình bày đẹp hơn
-                                st.info(res, icon="🎓")
+                    # Lấy dữ liệu từ Backend theo đúng API Contract mới
+                    final_answer = data.get("answer", "Xin lỗi, hệ thống không thể tạo câu trả lời.")
+                    critic_score = data.get("critic_score")
+                    trace_data = data.get("debug_trace", [])
+                    
+                    # Hiển thị tin nhắn của AI
+                    with st.chat_message("assistant"):
+                        st.markdown(final_answer)
+                        
+                        # --- VŨ KHÍ BẢO VỆ ĐỒ ÁN: SHOW LUỒNG SUY LUẬN ---
+                        if trace_data:
+                            with st.expander("🛠️ Chi tiết luồng xử lý Multi-Agent (Dành cho Giám khảo)"):
+                                if critic_score is not None:
+                                    st.markdown(f"**🏅 Điểm đánh giá (Critic Score):** `{critic_score}/1.0`")
+                                
+                                st.markdown("**Tiến trình thực thi song song:**")
+                                for t in trace_data:
+                                    status_icon = "✅" if t.get('status') == "SUCCESS" else "❌"
+                                    st.caption(f"{status_icon} **[{t.get('task_type')}]** {t.get('query_intent')}")
+                        
+                    # Lưu lại vào bộ nhớ lịch sử
+                    st.session_state.messages.append({"role": "assistant", "content": final_answer})
                 else:
-                    st.error("Có lỗi xảy ra khi xử lý câu hỏi từ Backend!")
+                    st.error(f"Lỗi {res_chat.status_code}: {res_chat.text}")
             except Exception as e:
-                st.error(f"Lỗi kết nối server: {e}")
+                st.error(f"Lỗi kết nối server: {e}. Hãy đảm bảo FastAPI đang chạy ở {BACKEND_URL}")

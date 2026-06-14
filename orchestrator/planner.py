@@ -8,7 +8,7 @@ load_dotenv()
 class OrchestratorPlanner:
     def __init__(self):
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.5)
-        self.planner_chain = self.prompt | self.llm.with_structured_output(TaskPlan)
+        self.planner_chain = self.llm.with_structured_output(TaskPlan)
 
     def create_plan(self, question: str, session_id: str) -> TaskPlan:
         system_prompt = f"""

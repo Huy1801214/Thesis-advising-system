@@ -1,5 +1,6 @@
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
@@ -8,14 +9,34 @@ __pycache__/
 *.egg-info/
 .env
 services/rag_baseline/.env
+.env.*
+!.env.example
 chroma_hierarchical/
 chroma_flat/
 parent_map.json
+hf_cache
 
-# Data/Output (không commit file lớn)
+# Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+*.tsbuildinfo
+.vite/
+frontend/.vite/
+coverage/
+frontend/coverage/
+
+# Data/Output 
 data/processed/
-chroma_db/  # Vector store local từ Chroma
+chroma_db/  
+qdrant_storage
+
+# IDE/Editor
+.idea/
+.vscode/
 
 # Misc
 .DS_Store
+Thumbs.db
 *.log

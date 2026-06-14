@@ -1,0 +1,1893 @@
+[
+  {
+    "course_code": "200101",
+    "course_name": "Triết học Mác Lênin",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202108",
+    "course_name": "Toán cao cấp A1",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202109",
+    "course_name": "Toán cao cấp A2",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202206",
+    "course_name": "Vật lý 2",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202501",
+    "course_name": "Giáo dục thể chất 1*",
+    "credits": {
+      "total": 1,
+      "ts": 45,
+      "lt": 0,
+      "th": 0,
+      "tt": 45,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "213603",
+    "course_name": "Anh văn 1*",
+    "credits": {
+      "total": 4,
+      "ts": 60,
+      "lt": 60,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214202",
+    "course_name": "Nhập môn công nghệ thông tin",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200102",
+    "course_name": "Kinh tế chính trị Mác- Lênin",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["200101"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200201",
+    "course_name": "Quân sự 1 (lý thuyết)*",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200202",
+    "course_name": "Quân sự 2 (thực hành)*",
+    "credits": {
+      "total": 3,
+      "ts": 90,
+      "lt": 0,
+      "th": 90,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202110",
+    "course_name": "Toán cao cấp A3",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202502",
+    "course_name": "Giáo dục thể chất 2*",
+    "credits": {
+      "total": 1,
+      "ts": 45,
+      "lt": 0,
+      "th": 0,
+      "tt": 45,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "213604",
+    "course_name": "Anh văn 2*",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": true,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200103",
+    "course_name": "Chủ nghĩa xã hội khoa học",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["200102"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202121",
+    "course_name": "Xác suất thống kê",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["202110"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202622",
+    "course_name": "Pháp luật đại cương",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214389",
+    "course_name": "Toán rời rạc",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200107",
+    "course_name": "Tư tưởng Hồ Chí Minh",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["200103"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "200105",
+    "course_name": "Lịch sử Đảng Cộng sản Việt Nam",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ bản - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["200107"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "202620",
+    "course_name": "Kỹ năng giao tiếp",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0101"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "208453",
+    "course_name": "Marketing căn bản",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0101"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214321",
+    "course_name": "Lập trình cơ bản",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214231",
+    "course_name": "Cấu trúc máy tính",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214294",
+    "course_name": "Hệ điều hành",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214202"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214331",
+    "course_name": "Lập trình nâng cao (A)",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": true,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 1,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214321"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214362",
+    "course_name": "Giao tiếp người-máy",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214441",
+    "course_name": "Cấu trúc dữ liệu",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214241",
+    "course_name": "Mạng máy tính cơ bản",
+    "credits": {
+      "total": 3,
+      "ts": 45,
+      "lt": 45,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214352",
+    "course_name": "Thiết kế hướng đối tượng",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214354",
+    "course_name": "Lý thuyết đồ thị",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214442",
+    "course_name": "Nhập môn cơ sở dữ liệu",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214990",
+    "course_name": "Phương pháp nghiên cứu khoa học",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 2,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["202121", "214441"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214252",
+    "course_name": "Lập trình mạng",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331", "214241", "214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214390",
+    "course_name": "Lập trình Python",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214462",
+    "course_name": "Lập trình Web (A)",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": true,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331", "214241"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214463",
+    "course_name": "Nhập môn trí tuệ nhân tạo",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214441"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214274",
+    "course_name": "Lập trình trên thiết bị di động",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214252"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214370",
+    "course_name": "Nhập môn công nghệ phần mềm (A)",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": true,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214352"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214461",
+    "course_name": "Phân tích và thiết kế hệ thống thông tin (A)",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": true,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214352", "214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214492",
+    "course_name": "Máy học (A)",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": true,
+      "is_conditional_star": false,
+      "group_name": "Khối kiến thức cơ sở ngành - Nhóm bắt buộc"
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214463", "214390", "202121"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214282",
+    "course_name": "Mạng máy tính nâng cao",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0301",
+      "min_group_credits_required": 4
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214241"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214372",
+    "course_name": "Lập trình .NET",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0301",
+      "min_group_credits_required": 4
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214331", "214241", "214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214386",
+    "course_name": "Lập trình PHP",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0301",
+      "min_group_credits_required": 4
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214241", "214331"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },{
+    "course_code": "214271",
+    "course_name": "Quản trị mạng",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214242", "214241"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214353",
+    "course_name": "Đồ họa máy tính",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214441"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214451",
+    "course_name": "Hệ quản trị cơ sở dữ liệu",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214464",
+    "course_name": "An toàn và bảo mật hệ thống thông tin",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214462"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214465",
+    "course_name": "Hệ thống thông tin địa lý ứng dụng",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214493",
+    "course_name": "Thực tập lập trình Web",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0302",
+      "min_group_credits_required": 6
+    },
+    "curriculum_position": {
+      "year": 3,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214462"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214273",
+    "course_name": "Lập trình mạng nâng cao",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214252"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214291",
+    "course_name": "Xử lý ảnh và thị giác máy tính",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214492"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214379",
+    "course_name": "Đảm bảo chất lượng và kiểm thử phần mềm",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214370"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214388",
+    "course_name": "Lập trình Front End",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214462"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214485",
+    "course_name": "Data Mining",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214442", "214492"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214490",
+    "course_name": "Phân tích dữ liệu lớn",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0303",
+      "min_group_credits_required": 8
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214492"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214292",
+    "course_name": "An ninh mạng",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214241"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214293",
+    "course_name": "Thực tập lập trình trên thiết bị di động",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214274"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214383",
+    "course_name": "Quản lý dự án phần mềm",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214370"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214491",
+    "course_name": "Data Warehouse",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214290",
+    "course_name": "IoT",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214252"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214471",
+    "course_name": "Hệ thống thông tin quản lý",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214483",
+    "course_name": "Thương mại điện tử",
+    "credits": {
+      "total": 3,
+      "ts": 60,
+      "lt": 30,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0304",
+      "min_group_credits_required": 9
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 1
+    },
+    "requirements": {
+      "previous_courses": ["214462", "214442"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214286",
+    "course_name": "Chuyên đề Java",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214352", "214441"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214374",
+    "course_name": "Chuyên đề WEB",
+    "credits": {
+      "total": 4,
+      "ts": 75,
+      "lt": 45,
+      "th": 30,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214462"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214984",
+    "course_name": "Đồ án chuyên ngành",
+    "credits": {
+      "total": 2,
+      "ts": 60,
+      "lt": 0,
+      "th": 0,
+      "tt": 0,
+      "da": 60,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214987",
+    "course_name": "Khóa luận tốt nghiệp",
+    "credits": {
+      "total": 12,
+      "ts": 180,
+      "lt": 0,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 180
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214988",
+    "course_name": "Tiểu luận tốt nghiệp",
+    "credits": {
+      "total": 6,
+      "ts": 90,
+      "lt": 0,
+      "th": 0,
+      "tt": 0,
+      "da": 90,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214989",
+    "course_name": "Khởi nghiệp",
+    "credits": {
+      "total": 2,
+      "ts": 30,
+      "lt": 30,
+      "th": 0,
+      "tt": 0,
+      "da": 0,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": [],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  },
+  {
+    "course_code": "214991",
+    "course_name": "Thực tập doanh nghiệp",
+    "credits": {
+      "total": 2,
+      "ts": 60,
+      "lt": 0,
+      "th": 0,
+      "tt": 0,
+      "da": 60,
+      "la": 0
+    },
+    "classification": {
+      "is_core_A": false,
+      "is_conditional_star": false,
+      "group_name": "Nhóm học phần bắt buộc tự chọn 0305",
+      "min_group_credits_required": 12
+    },
+    "curriculum_position": {
+      "year": 4,
+      "semester": 2
+    },
+    "requirements": {
+      "previous_courses": ["214370"],
+      "prerequisites": [],
+      "parallel_courses": []
+    }
+  }
+]

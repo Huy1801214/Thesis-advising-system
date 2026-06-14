@@ -1,0 +1,15 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.env
+.ipynb_checkpoints/
+data/
+hf_cache
+qdrant_storage
+frontend/node_modules
+frontend/dist
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts

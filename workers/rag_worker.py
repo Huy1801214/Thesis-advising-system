@@ -1,6 +1,5 @@
-# workers/rag_engine.py
 import os
-from langchain_qdrant import QdrantVectorStore
+from langchain_qdrant import QdrantVectorStore, FastEmbedSparse
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -12,34 +11,37 @@ NGỮ CẢNH:
 ---
 CÂU HỎI: {question}
 ---
-Yêu cầu: Trả lời ngắn gọn (dưới 200 từ), chính xác, có dẫn chứng Điều/Chương.
+Yêu cầu: Trả lời đầy đủ (dưới 500 từ), chính xác, có dẫn chứng Điều/Chương/ Trích từ Sổ tay sinh viên hay Quy chế học vụ.
 Nếu không có thông tin trong ngữ cảnh, hãy nói đúng câu: "Tôi chưa có dữ liệu về vấn đề này".
 """
 
 class RAGEngine:
     def __init__(self):
-        self.embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large")
-        # Kết nối Qdrant thực tế (thay vì :memory: của notebook)
+        self.vector_url = os.getenv("QDRANT_URL", "http://nlu_vector_db:6333")
+        self.embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-large", cache_folder="./hf_cache")
+        self.sparse_embeddings = FastEmbedSparse(model_name="Qdrant/bm25")
         self.vectorstore = QdrantVectorStore.from_existing_collection(
             embedding=self.embeddings,
+            sparse_embedding=self.sparse_embeddings, 
+            retrieval_mode="hybrid",
             collection_name="nlu_academic_rules",
-            url="http://localhost:6333" 
+            url=self.vector_url
         )
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_retries=5)
+        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=1, max_retries=5)
 
-    def search_and_answer(self, query: str):
-        # 1. Retrieval (Logic từ notebook)
-        docs = self.vectorstore.similarity_search(query, k=4)
+    async def search_and_answer(self, query: str):
+        # 1. Retrieval 
+        search_query = f"query: {query}"
+        docs = self.vectorstore.similarity_search(search_query, k=4)
         context_blocks = []
         for d in docs:
-            chuong = d.metadata.get("Chuong", "Không rõ chương")
-            dieu = d.metadata.get("Dieu", "Không rõ điều")
-            block = f"[{chuong} - {dieu}]\n{d.page_content}"
+            context_path = d.metadata.get("ContextPath", "Mục chung")
+            block = f"[{context_path}]\n{d.page_content}"
             context_blocks.append(block)
         
         context = "\n\n".join(context_blocks)
         
-        # 2. Generation (Prompt từ notebook)
+        # 2. Generation 
         prompt = PROMPT_TEMPLATE.format(context=context, question=query)
-        resp = self.llm.invoke(prompt)
+        resp = await self.llm.ainvoke(prompt)
         return resp.content

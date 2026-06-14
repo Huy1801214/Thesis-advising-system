@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from core.database import engine, Base
-from model.user import User
+from model import User, StudentProfile, ChatMessage
 
 def init_db():
     print("Đang kết nối tới PostgreSQL và khởi tạo các bảng...")

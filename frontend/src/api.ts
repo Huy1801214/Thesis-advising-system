@@ -12,31 +12,19 @@ export type RegisterResponse = {
   is_active: boolean;
 };
 
+export type ChatTraceItem = {
+  task_id: string;
+  task_type: "RAG" | "GRAG";
+  query_intent: string;
+  raw_data: string;
+  status: "SUCCESS" | "FAILED";
+  error_log?: string;
+};
+
 export type ChatResponse = {
-  session_id: string;
-  status: string;
-  answer?: string;
-  data: unknown[];
-  trace?: Array<{
-    task_id: string;
-    worker: string;
-    sub_question: string;
-    answer: string;
-    status: string;
-  }>;
-  critic?: {
-    passed: boolean;
-    score: number;
-    issues: Array<{
-      type: string;
-      severity: string;
-      target: string;
-      message: string;
-      revision_instruction: string;
-    }>;
-    revised_answer?: string | null;
-    error?: string | null;
-  };
+  answer: string;
+  critic_score: number;
+  debug_trace: ChatTraceItem[];
 };
 
 async function parseError(response: Response, fallback: string) {
@@ -105,3 +93,88 @@ export async function sendQuestion(question: string, token: string) {
 
   return (await response.json()) as ChatResponse;
 }
+
+export type UploadTranscriptResponse = {
+  status: string;
+  message: string;
+  data?: {
+    gpa: string;
+    total_passed: number;
+  };
+};
+
+export async function uploadTranscript(file: File, token: string) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${API_BASE_URL}/api/grag/upload-transcript`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (response.status === 401) {
+    throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+  }
+
+  if (!response.ok) {
+    throw new Error(await parseError(response, "Không thể tải lên bảng điểm."));
+  }
+
+  return (await response.json()) as UploadTranscriptResponse;
+}
+
+export async function sendQuestionStream(
+  question: string,
+  token: string,
+  onEvent: (event: string, data: any) => void
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/chat/stream?question=${encodeURIComponent(question)}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (response.status === 401) {
+    throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+  }
+
+  if (!response.ok) {
+    throw new Error(await parseError(response, "Không thể kết nối hệ thống tư vấn."));
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) return;
+
+  const decoder = new TextDecoder("utf-8");
+  let buffer = "";
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      const cleanLine = line.trim();
+      if (cleanLine.startsWith("data: ")) {
+        try {
+          const payload = JSON.parse(cleanLine.slice(6));
+          onEvent(payload.event, payload);
+        } catch (e) {
+          console.error("Lỗi parse stream:", e);
+        }
+      }
+    }
+  }
+}
+
+

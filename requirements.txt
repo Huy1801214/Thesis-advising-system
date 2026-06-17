@@ -19,7 +19,7 @@ psycopg2-binary
 
 # --- Agentic AI & LLM ---
 langchain
-langchain-google-genai
+langchain-openai
 langchain-community
 langchain-huggingface
 sentence-transformers

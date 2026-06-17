@@ -6,6 +6,14 @@ from workers.llm_extractor import EntityExtractor
 
 GLOBAL_DB_SEMAPHORE = asyncio.Semaphore(20)
 
+
+def task_parameters_to_dict(parameters: Any) -> Dict[str, Any]:
+    if parameters is None:
+        return {}
+    if hasattr(parameters, "model_dump"):
+        return parameters.model_dump(exclude_none=True)
+    return dict(parameters)
+
 class TaskExecutor:
     def __init__(self):
         self.rag_agent = RAGEngine()
@@ -14,17 +22,16 @@ class TaskExecutor:
 
     async def _execute_single_task(self, task: Any, question: str, mssv: str, student_data: Dict) -> Dict:        
         async with GLOBAL_DB_SEMAPHORE:
-            if not task.parameters:
-                task.parameters = {}
+            parameters = task_parameters_to_dict(getattr(task, "parameters", None))
                 
-            task.parameters.update({
+            parameters.update({
                 "student_id": mssv,
                 "query": task.query_intent,
                 "passed_courses": student_data.get("passed_courses", []) if student_data else [],
                 "cumulative_gpa": student_data.get("cumulative_gpa") if student_data else None
             })
             
-            current_intent = task.parameters.get("intent", "")
+            current_intent = parameters.get("intent", "")
             result_data = {
                 "task_id": task.task_id,
                 "task_type": task.task_type,
@@ -35,22 +42,22 @@ class TaskExecutor:
             
             try:
                 if task.task_type == "GRAG":
-                    course_name = task.parameters.get("course_name", "")
+                    course_name = parameters.get("course_name", "")
                     extract_target = course_name if course_name else question
                     
                     planned_codes = await self.extractor.extract_course_codes(extract_target)
                     
                     if current_intent == "registration_check":
-                        task.parameters["planned_courses"] = planned_codes
+                        parameters["planned_courses"] = planned_codes
                     elif current_intent == "course_info" and planned_codes:
-                        task.parameters["course_code"] = planned_codes[0]
+                        parameters["course_code"] = planned_codes[0]
                     
                     if not student_data and current_intent in ["registration_check", "graduation_check"]:
                         msg = "Để hệ thống tư vấn chính xác về điều kiện học vụ, bạn vui lòng đính kèm file Bảng điểm (Excel/CSV) vào khung chat trước nhé!"
                         result_data["raw_data"] = f"--- Dữ liệu từ GRAG ({task.query_intent}) ---\n{msg}"
                         return result_data
                     
-                    res = await self.grag_agent.query_graph(task.parameters)
+                    res = await self.grag_agent.query_graph(parameters)
                     result_data["raw_data"] = f"--- Dữ liệu từ GRAG ({task.query_intent}) ---\n{res}"
 
                 elif task.task_type == "RAG":

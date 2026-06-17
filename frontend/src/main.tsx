@@ -1,4 +1,4 @@
-import React, { FormEvent, useMemo, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
   BookOpenCheck,
@@ -13,15 +13,28 @@ import {
   Sparkles,
   UserPlus,
   UserRound,
+  Upload,
+  FileSpreadsheet,
+  Loader2,
+  ChevronDown,
 } from "lucide-react";
-import { login, register, sendQuestion } from "./api";
+import { login, register, sendQuestion, uploadTranscript, ChatTraceItem, sendQuestionStream } from "./api";
 import "./styles.css";
+
+type ThinkingStep = {
+  id: string;
+  label: string;
+  status: "pending" | "running" | "completed" | "failed";
+};
 
 type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   content: string;
   sources?: string[];
+  criticScore?: number;
+  debugTrace?: ChatTraceItem[];
+  thinkingSteps?: ThinkingStep[];
 };
 
 const TOKEN_STORAGE_KEY = "thesis_advising_token";
@@ -50,6 +63,21 @@ function App() {
   const [question, setQuestion] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isAsking, setIsAsking] = useState(false);
+  const [activeThinkingSteps, setActiveThinkingSteps] = useState<ThinkingStep[]>([]);
+  const [openThinkingMsgs, setOpenThinkingMsgs] = useState<{ [msgId: string]: boolean }>({});
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccessMessage, setUploadSuccessMessage] = useState("");
+  const [uploadErrorMessage, setUploadErrorMessage] = useState("");
+  const [extractedGpa, setExtractedGpa] = useState<string | null>(null);
+  const [extractedPassedCount, setExtractedPassedCount] = useState<number | null>(null);
+
+  function toggleThinking(msgId: string) {
+    setOpenThinkingMsgs((prev) => ({
+      ...prev,
+      [msgId]: !prev[msgId],
+    }));
+  }
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",
@@ -135,26 +163,89 @@ function App() {
     setQuestion("");
     setChatError("");
     setIsAsking(true);
+    setActiveThinkingSteps([]);
+
+    let finalAns = "";
+    let criticScr = 0;
+    let debugTrc: ChatTraceItem[] = [];
 
     try {
-      const response = await sendQuestion(prompt, token);
-      const finalAnswer =
-        response.answer ||
-        (response.data.length > 0 ? response.data.map(formatResult).join("\n\n") : "");
-      const traceNotes = response.trace?.map(
-        (item) =>
-          `${item.task_id} | ${item.worker} | ${item.status}\n${item.sub_question}\n${item.answer}`,
-      );
+      await sendQuestionStream(prompt, token, (event, data) => {
+        if (event === "planner_start") {
+          setActiveThinkingSteps([
+            { id: "planner", label: "Lập kế hoạch truy vấn (Planner)", status: "running" }
+          ]);
+        }
+        else if (event === "planner_done") {
+          setActiveThinkingSteps((prev) => {
+            const updated = prev.map(s => s.id === "planner" ? { ...s, status: "completed" as const } : s);
+            const subtasks = data.tasks.map((t: any) => ({
+              id: t.task_id,
+              label: `Chạy Agent ${t.task_type}: "${t.query_intent}"`,
+              status: "pending" as const
+            }));
+            return [...updated, ...subtasks];
+          });
+        }
+        else if (event === "executor_running") {
+          setActiveThinkingSteps((prev) =>
+            prev.map(s => data.running_tasks.includes(s.id) ? { ...s, status: "running" as const } : s)
+          );
+        }
+        else if (event === "task_completed") {
+          setActiveThinkingSteps((prev) =>
+            prev.map(s => s.id === data.task.task_id ? { ...s, status: "completed" as const } : s)
+          );
+        }
+        else if (event === "synthesizer_start") {
+          setActiveThinkingSteps((prev) => [
+            ...prev,
+            { id: "synthesizer", label: "Tổng hợp thông tin câu trả lời (Synthesizer)", status: "running" as const }
+          ]);
+        }
+        else if (event === "synthesizer_done") {
+          setActiveThinkingSteps((prev) =>
+            prev.map(s => s.id === "synthesizer" ? { ...s, status: "completed" as const } : s)
+          );
+        }
+        else if (event === "critic_start") {
+          setActiveThinkingSteps((prev) => [
+            ...prev,
+            { id: "critic", label: "Critic Agent phản biện và kiểm duyệt chất lượng", status: "running" as const }
+          ]);
+        }
+        else if (event === "critic_done") {
+          setActiveThinkingSteps((prev) =>
+            prev.map(s => s.id === "critic" ? { ...s, status: "completed" as const } : s)
+          );
+        }
+        else if (event === "final_result") {
+          finalAns = data.answer;
+          criticScr = data.critic_score;
+          debugTrc = data.debug_trace;
+        }
+      });
 
-      setMessages((current) => [
-        ...current,
-        {
-          id: response.session_id,
-          role: "assistant",
-          content: finalAnswer || "Chưa tìm thấy kết quả phù hợp.",
-          sources: traceNotes && traceNotes.length > 1 ? traceNotes : undefined,
-        },
-      ]);
+      // Ghi nhận tin nhắn cuối cùng kèm timeline suy nghĩ đã lưu
+      setActiveThinkingSteps((prev) => {
+        const finalized = prev.map(s => 
+          s.status === "running" || s.status === "pending" ? { ...s, status: "completed" as const } : s
+        );
+
+        setMessages((current) => [
+          ...current,
+          {
+            id: `msg_${Date.now()}`,
+            role: "assistant",
+            content: finalAns || "Chưa tìm thấy kết quả phù hợp.",
+            criticScore: criticScr,
+            debugTrace: debugTrc,
+            thinkingSteps: finalized
+          },
+        ]);
+        return [];
+      });
+
     } catch (error) {
       const message = error instanceof Error ? error.message : "Không thể gửi câu hỏi.";
       setChatError(message);
@@ -164,6 +255,37 @@ function App() {
       }
     } finally {
       setIsAsking(false);
+      setActiveThinkingSteps([]);
+    }
+  }
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setUploadSuccessMessage("");
+    setUploadErrorMessage("");
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  }
+
+  async function handleUploadTranscript() {
+    if (!selectedFile || !token) return;
+    setIsUploading(true);
+    setUploadSuccessMessage("");
+    setUploadErrorMessage("");
+
+    try {
+      const result = await uploadTranscript(selectedFile, token);
+      setUploadSuccessMessage(result.message || "Đồng bộ bảng điểm thành công!");
+      if (result.data) {
+        setExtractedGpa(result.data.gpa);
+        setExtractedPassedCount(result.data.total_passed);
+      }
+      setSelectedFile(null);
+    } catch (error) {
+      setUploadErrorMessage(error instanceof Error ? error.message : "Tải lên bảng điểm thất bại.");
+    } finally {
+      setIsUploading(false);
     }
   }
 
@@ -171,6 +293,13 @@ function App() {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     setToken(null);
     setChatError("");
+    setSelectedFile(null);
+    setUploadSuccessMessage("");
+    setUploadErrorMessage("");
+    setExtractedGpa(null);
+    setExtractedPassedCount(null);
+    setActiveThinkingSteps([]);
+    setOpenThinkingMsgs({});
   }
 
   if (!token) {
@@ -320,6 +449,68 @@ function App() {
           <span>Trạng thái</span>
           <strong>Đã đăng nhập</strong>
         </div>
+
+        <div className="upload-container">
+          <h2 className="upload-title">Tải lên bảng điểm</h2>
+          <p className="upload-subtitle">
+            Cập nhật kết quả học tập để AI tư vấn khóa luận chính xác hơn (chấp nhận .csv, .xlsx)
+          </p>
+
+          <label className="file-select-label">
+            <FileSpreadsheet size={18} />
+            <span>Chọn file bảng điểm</span>
+            <input
+              type="file"
+              accept=".csv,.xlsx,.xls"
+              onChange={handleFileChange}
+              className="file-select-input"
+            />
+          </label>
+
+          {selectedFile && (
+            <div className="selected-file-row">
+              <Upload size={14} />
+              <span className="selected-file-name">{selectedFile.name}</span>
+            </div>
+          )}
+
+          {selectedFile && (
+            <button
+              className="upload-btn"
+              type="button"
+              disabled={isUploading}
+              onClick={handleUploadTranscript}
+            >
+              {isUploading ? (
+                <Loader2 size={16} className="spin" />
+              ) : (
+                <Upload size={16} />
+              )}
+              <span>{isUploading ? "Đang xử lý..." : "Xử lý bảng điểm"}</span>
+            </button>
+          )}
+
+          {uploadSuccessMessage && (
+            <div className="upload-result-box success">
+              <p>{uploadSuccessMessage}</p>
+              {(extractedGpa !== null || extractedPassedCount !== null) && (
+                <div className="extracted-info">
+                  {extractedGpa !== null && <div>GPA tích lũy: {extractedGpa}</div>}
+                  {extractedPassedCount !== null && (
+                    <div>Số môn đã đạt: {extractedPassedCount} môn</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {uploadErrorMessage && (
+            <div className="upload-result-box error">
+              <p>{uploadErrorMessage}</p>
+            </div>
+          )}
+        </div>
+
         <button className="ghost-button" type="button" onClick={handleLogout}>
           <LogOut size={18} />
           Đăng xuất
@@ -345,7 +536,7 @@ function App() {
                 {message.role === "user" ? <UserRound size={18} /> : <Sparkles size={18} />}
               </div>
               <div className="message-body">
-                <p>{message.content}</p>
+                <p style={{ whiteSpace: "pre-wrap" }}>{message.content}</p>
                 {message.sources && (
                   <div className="source-list">
                     {message.sources.map((source, index) => (
@@ -354,6 +545,70 @@ function App() {
                         <p>{source}</p>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {message.role === "assistant" && message.thinkingSteps && message.thinkingSteps.length > 0 && (
+                  <div className="thinking-container">
+                    <div
+                      className={`thinking-header ${openThinkingMsgs[message.id] ? "open" : ""}`}
+                      onClick={() => toggleThinking(message.id)}
+                    >
+                      <ChevronDown size={14} className="chevron" />
+                      <span>Xem quá trình suy nghĩ</span>
+                    </div>
+                    {openThinkingMsgs[message.id] && (
+                      <div className="thinking-body">
+                        {message.thinkingSteps.map((step) => (
+                          <div key={step.id} className={`thinking-step-item ${step.status}`}>
+                            <div className="thinking-step-dot" />
+                            <span>{step.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {message.role === "assistant" && message.debugTrace && message.debugTrace.length > 0 && (
+                  <div className="trace-section">
+                    <details className="trace-details">
+                      <summary className="trace-summary">
+                        <span>🛠️ Luồng xử lý Multi-Agent (Dành cho Giám khảo)</span>
+                        <span>Mở rộng ▼</span>
+                      </summary>
+                      <div className="trace-content">
+                        {message.criticScore !== undefined && (
+                          <div className="critic-badge-row">
+                            <span>🏅 Điểm đánh giá (Critic Score):</span>
+                            <span className="score">{message.criticScore}/1.0</span>
+                          </div>
+                        )}
+                        <div className="trace-steps-container">
+                          {message.debugTrace.map((step, sIdx) => (
+                            <div className="trace-step-card" key={`trace-${message.id}-${sIdx}`}>
+                              <div className="trace-step-header">
+                                <span className="trace-step-title">{step.task_id}</span>
+                                <div className="trace-step-meta">
+                                  <span className={`step-type-badge ${step.task_type.toLowerCase()}`}>
+                                    {step.task_type}
+                                  </span>
+                                  <span className={`step-status-badge ${step.status.toLowerCase()}`}>
+                                    {step.status}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="trace-step-body">
+                                <div className="trace-step-query">
+                                  Truy vấn: <strong>{step.query_intent}</strong>
+                                </div>
+                                <pre className="trace-step-data">{step.raw_data}</pre>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
                   </div>
                 )}
               </div>
@@ -365,9 +620,28 @@ function App() {
               <div className="message-avatar">
                 <Sparkles size={18} />
               </div>
-              <div className="message-body loading-message">
-                <span />
-                <p>AI đang suy nghĩ và truy xuất dữ liệu...</p>
+              <div className="message-body loading-message-container">
+                <div className="loading-message">
+                  <span />
+                  <p>AI đang chuẩn bị câu trả lời...</p>
+                </div>
+                
+                {activeThinkingSteps.length > 0 && (
+                  <div className="thinking-container">
+                    <div className="thinking-header open">
+                      <ChevronDown size={14} className="chevron" />
+                      <span>Xem quá trình suy nghĩ</span>
+                    </div>
+                    <div className="thinking-body">
+                      {activeThinkingSteps.map((step) => (
+                        <div key={step.id} className={`thinking-step-item ${step.status}`}>
+                          <div className="thinking-step-dot" />
+                          <span>{step.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </article>
           )}

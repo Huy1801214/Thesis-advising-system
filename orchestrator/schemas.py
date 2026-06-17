@@ -1,6 +1,19 @@
-from typing import Any, Dict, List, Literal, Optional
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
+
+
+class TaskParameters(BaseModel):
+    intent: Optional[str] = Field(default=None, description="Task intent")
+    planned_courses: List[str] = Field(default_factory=list, description="Course codes to check")
+    course_code: Optional[str] = Field(default=None, description="Single course code")
+    course_name: Optional[str] = Field(default=None, description="Course name mentioned by user")
+    group_name: Optional[str] = Field(default=None, description="Course group name")
+    student_id: Optional[str] = Field(default=None, description="Student id if explicitly mentioned")
+    query: Optional[str] = Field(default=None, description="Worker query")
+    original_question: Optional[str] = Field(default=None, description="Original user question")
+    passed_courses: List[str] = Field(default_factory=list, description="Courses the student has passed")
+    cumulative_gpa: Optional[Union[float, str]] = Field(default=None, description="Student cumulative GPA")
 
 
 class Task(BaseModel):
@@ -9,8 +22,8 @@ class Task(BaseModel):
     query_intent: str = Field(
         description="Standalone rewritten sub-question for retrieval and synthesis"
     )
-    parameters: Dict[str, Any] = Field(
-        default_factory=dict,
+    parameters: TaskParameters = Field(
+        default_factory=TaskParameters,
         description="Extracted entities and intent for the selected worker",
     )
 

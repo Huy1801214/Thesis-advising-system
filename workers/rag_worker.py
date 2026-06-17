@@ -1,7 +1,7 @@
 import os
 from langchain_qdrant import QdrantVectorStore, FastEmbedSparse
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm import build_chat_model
 
 PROMPT_TEMPLATE = """Bạn là một chuyên gia tư vấn học vụ tại ĐH Nông Lâm.
 Dựa vào NGỮ CẢNH dưới đây để trả lời CÂU HỎI của sinh viên.
@@ -27,7 +27,7 @@ class RAGEngine:
             collection_name="nlu_academic_rules",
             url=self.vector_url
         )
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=1, max_retries=5)
+        self.llm = build_chat_model(temperature=1, max_retries=5)
 
     async def search_and_answer(self, query: str):
         # 1. Retrieval 

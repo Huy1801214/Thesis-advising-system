@@ -2,14 +2,14 @@ import json
 from typing import Any, Dict, List
 
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm import build_chat_model
 
 load_dotenv()
 
 
 class FinalSynthesizer:
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+        self.llm = build_chat_model(temperature=0)
 
     async def synthesize(self, original_question: str, trace: List[Dict[str, Any]]) -> str:
         prompt = f"""

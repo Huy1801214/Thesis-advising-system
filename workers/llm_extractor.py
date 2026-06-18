@@ -2,7 +2,7 @@
 
 import json
 import re
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm import build_chat_model
 from workers import grag_tools 
 
 CUSTOM_ALIASES = {
@@ -17,7 +17,7 @@ class EntityExtractor:
         self.course_cache = None
         self.sorted_keywords = None
         
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+        self.llm = build_chat_model(temperature=0)
 
     async def _build_dynamic_cache(self):
         print("[EntityExtractor] Đang xây dựng cache từ khóa môn học từ đồ thị...")

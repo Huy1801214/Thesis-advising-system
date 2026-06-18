@@ -1,11 +1,11 @@
 import json
 from typing import Dict, Any
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm import build_chat_model
 from workers import grag_tools
 
 class GRAGEngine:
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=1)
+        self.llm = build_chat_model(temperature=1)
         self.system_prompt = """Bạn là một Chuyên viên Tư vấn Học vụ xuất sắc, chuyên nghiệp và tận tâm tại trường Đại học. Nhiệm vụ của bạn là giải đáp thắc mắc của sinh viên về đăng ký môn học, điều kiện tiên quyết và lộ trình học tập.
 
 NGUYÊN TẮC TỐI THƯỢNG (TUYỆT ĐỐI TUÂN THỦ):

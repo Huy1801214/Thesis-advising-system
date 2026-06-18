@@ -2,7 +2,7 @@ import json
 from typing import Any, Dict, List
 
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm import build_chat_model
 
 from orchestrator.schemas import CriticReport
 
@@ -11,8 +11,8 @@ load_dotenv()
 
 class CriticAgent:
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
-        self.critic_chain = self.llm.with_structured_output(CriticReport)
+        self.llm = build_chat_model(temperature=0)
+        self.critic_chain = self.llm.with_structured_output(CriticReport, method="function_calling")
 
     async def review(
         self,

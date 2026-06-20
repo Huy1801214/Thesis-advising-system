@@ -1,11 +1,13 @@
 import os
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from dotenv import load_dotenv
 from pathlib import Path
 import bcrypt
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 env_path = Path(__file__).resolve().parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
@@ -41,3 +43,19 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     password_bytes = plain_password.encode('utf-8')
     hashed_bytes = hashed_password.encode('utf-8')
     return bcrypt.checkpw(password_bytes, hashed_bytes)
+
+def get_student_identifier(request: Request) -> str:
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
+        try:
+            payload = verify_token(token)
+            mssv = payload.get("sub")
+            if mssv:
+                return f"student_{mssv}"
+        except Exception:
+            pass
+    
+    return get_remote_address(request)
+
+limiter = Limiter(key_func=get_student_identifier)

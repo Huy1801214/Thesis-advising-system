@@ -35,6 +35,7 @@ type ChatMessage = {
   criticScore?: number;
   debugTrace?: ChatTraceItem[];
   thinkingSteps?: ThinkingStep[];
+  isClarify?: boolean;
 };
 
 const TOKEN_STORAGE_KEY = "thesis_advising_token";
@@ -51,6 +52,7 @@ function formatResult(result: unknown) {
 }
 
 function App() {
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_STORAGE_KEY));
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [mssv, setMssv] = useState("");
@@ -223,6 +225,11 @@ function App() {
           finalAns = data.answer;
           criticScr = data.critic_score;
           debugTrc = data.debug_trace;
+
+          const requiresClarification = data.debug_trace?.some((t: any) => t.status === "CLARIFYING");
+          if (requiresClarification) {
+            setTimeout(() => inputRef.current?.focus(), 100);
+          }
         }
       });
 
@@ -231,6 +238,8 @@ function App() {
         const finalized = prev.map(s => 
           s.status === "running" || s.status === "pending" ? { ...s, status: "completed" as const } : s
         );
+        
+        const isClarify = debugTrc?.some((t: any) => t.status === "CLARIFYING");
 
         setMessages((current) => [
           ...current,
@@ -240,7 +249,8 @@ function App() {
             content: finalAns || "Chưa tìm thấy kết quả phù hợp.",
             criticScore: criticScr,
             debugTrace: debugTrc,
-            thinkingSteps: finalized
+            thinkingSteps: finalized,
+            isClarify: isClarify
           },
         ]);
         return [];
@@ -536,7 +546,24 @@ function App() {
                 {message.role === "user" ? <UserRound size={18} /> : <Sparkles size={18} />}
               </div>
               <div className="message-body">
-                <p style={{ whiteSpace: "pre-wrap" }}>{message.content}</p>
+                {message.isClarify ? (
+                  <div style={{ 
+                    backgroundColor: "#fff3cd", 
+                    color: "#856404", 
+                    padding: "12px", 
+                    borderRadius: "8px", 
+                    borderLeft: "4px solid #ffeeba", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: "10px",
+                    marginBottom: "12px"
+                  }}>
+                    <span style={{ fontSize: "1.2rem" }}>⚠️</span>
+                    <strong>{message.content}</strong>
+                  </div>
+                ) : (
+                  <p style={{ whiteSpace: "pre-wrap" }}>{message.content}</p>
+                )}
                 {message.sources && (
                   <div className="source-list">
                     {message.sources.map((source, index) => (

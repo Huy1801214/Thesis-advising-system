@@ -5,7 +5,7 @@ from workers.grag_worker import GRAGEngine
 from workers.llm_extractor import EntityExtractor
 
 GLOBAL_DB_SEMAPHORE = asyncio.Semaphore(20)
-
+TASK_TIMEOUT = 15.0
 
 def task_parameters_to_dict(parameters: Any) -> Dict[str, Any]:
     if parameters is None:
@@ -20,6 +20,20 @@ class TaskExecutor:
         self.grag_agent = GRAGEngine()
         self.extractor = EntityExtractor()
 
+    async def _execute_with_retry(self, func, *args, max_retries=2, **kwargs):
+        last_exception = None
+        for attempt in range(max_retries):
+            try:
+                return await func(*args, **kwargs)
+            except asyncio.TimeoutError as e:
+                last_exception = e
+                print(f"[Warning] Mất kết nối DB lần {attempt + 1}. Đang thử lại...")
+            except Exception as e:
+                last_exception = e
+                print(f"[Warning] Lỗi truy xuất lần {attempt + 1}: {str(e)}")
+                await asyncio.sleep(1) 
+        raise last_exception
+    
     async def _execute_single_task(self, task: Any, question: str, mssv: str, student_data: Dict) -> Dict:        
         async with GLOBAL_DB_SEMAPHORE:
             parameters = task_parameters_to_dict(getattr(task, "parameters", None))
@@ -41,7 +55,13 @@ class TaskExecutor:
             }
             
             try:
-                if task.task_type == "GRAG":
+                if task.task_type == "CLARIFY":
+                    clarify_msg = parameters.get("clarification_message", "Hệ thống cần thêm thông tin từ bạn.")
+                    result_data["raw_data"] = f"--- [Yêu cầu làm rõ từ hệ thống] ---\n{clarify_msg}"
+                    result_data["status"] = "CLARIFYING"
+                    return result_data
+                
+                elif task.task_type == "GRAG":
                     course_name = parameters.get("course_name", "")
                     extract_target = course_name if course_name else question
                     
@@ -54,25 +74,38 @@ class TaskExecutor:
                     
                     if not student_data and current_intent in ["registration_check", "graduation_check"]:
                         msg = "Để hệ thống tư vấn chính xác về điều kiện học vụ, bạn vui lòng đính kèm file Bảng điểm (Excel/CSV) vào khung chat trước nhé!"
-                        result_data["raw_data"] = f"--- Dữ liệu từ GRAG ({task.query_intent}) ---\n{msg}"
+                        result_data["raw_data"] = f"--- Dữ liệu từ GRAG ({task.query_intent}) ---\n[THIẾU BẢNG ĐIỂM] {msg}"
+                        result_data["status"] = "MISSING_DATA"
                         return result_data
                     
-                    res = await self.grag_agent.query_graph(parameters)
+                    res = await self._execute_with_retry(self.grag_agent.query_graph, parameters)
                     result_data["raw_data"] = f"--- Dữ liệu từ GRAG ({task.query_intent}) ---\n{res}"
 
                 elif task.task_type == "RAG":
-                    res = await self.rag_agent.search_and_answer(task.query_intent) 
+                    res = await self._execute_with_retry(self.rag_agent.search_and_answer, task.query_intent) 
                     result_data["raw_data"] = f"--- Dữ liệu từ Sổ tay ({task.query_intent}) ---\n{res}"
                     
+            except asyncio.TimeoutError:
+                result_data["raw_data"] = f"[Error] Agent {task.task_type} quá thời gian xử lý."
+                result_data["status"] = "TIMEOUT"
             except Exception as e:
-                print(f"[error] Agent {task.task_id} ({task.task_type}) gặp sự cố: {str(e)}")
-                result_data["raw_data"] = f"[Lỗi Kỹ Thuật] Không thể truy xuất thông tin phần {task.task_type}."
+                result_data["raw_data"] = f"[Error] Agent {task.task_type} gặp sự cố nội bộ: {str(e)}"
                 result_data["status"] = "FAILED"
                 result_data["error_log"] = str(e)
                 
             return result_data
 
     async def execute_plan(self, plan: Any, question: str, mssv: str, student_data: Dict) -> Dict:
+        if getattr(plan, "needs_clarification", False) or any(t.task_type == "CLARIFY" for t in plan.tasks):
+            clarify_task = next((t for t in plan.tasks if t.task_type == "CLARIFY"), None)
+            msg = clarify_task.parameters.clarification_message if clarify_task else "Xin vui lòng cung cấp thêm chi tiết."
+            print("[Executor] Dừng truy vấn DB. Yêu cầu sinh viên làm rõ câu hỏi.")
+            return {
+                "raw_context": f"--- [THÔNG ĐIỆP TỪ HỆ THỐNG] ---\n{msg}",
+                "debug_data": [],
+                "tasks_execution_info": [{"task_id": "SYS_CLARIFY", "status": "CLARIFYING", "message": msg}]
+            }
+        
         MAX_TASKS = 5
         safe_tasks = plan.tasks[:MAX_TASKS]
         if len(plan.tasks) > MAX_TASKS:
@@ -80,7 +113,10 @@ class TaskExecutor:
 
         # 1. Scatter: Khởi tạo danh sách các coroutines
         task_coroutines = [
-            self._execute_single_task(task, question, mssv, student_data) 
+            asyncio.wait_for(
+                self._execute_single_task(task, question, mssv, student_data),
+                timeout=TASK_TIMEOUT
+            )
             for task in safe_tasks
         ]
         

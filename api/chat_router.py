@@ -3,14 +3,18 @@ from fastapi.responses import StreamingResponse
 import uuid
 import hashlib
 import json
+from sqlalchemy.orm import Session
+from core.database import get_db, SessionLocal
 import asyncio
 from core.security import verify_token, oauth2_scheme, limiter
 from api.upload_infor import STUDENT_TRANSCRIPT_STORE
+from model.chat_message import ChatMessage, TaskStatus
 
 from orchestrator.planner import OrchestratorPlanner
 from orchestrator.executor import TaskExecutor
 from orchestrator.synthesizer import FinalSynthesizer
 from orchestrator.critic import CriticAgent
+from sqlalchemy import desc, func
 
 router = APIRouter()
 planner = OrchestratorPlanner()
@@ -59,7 +63,7 @@ async def handle_chat(question: str, mssv: str = Depends(get_current_mssv)):
 
 @router.post("/chat/stream")
 @limiter.limit("3/minute") 
-async def handle_chat_stream(request: Request, question: str, mssv: str = Depends(get_current_mssv)):
+async def handle_chat_stream(request: Request, question: str, session_id: str = None, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
     print(f"[RateLimit] Đang kiểm soát lưu lượng cho sinh viên: {mssv}")
     query_hash = f"{mssv}_{hashlib.md5(question.strip().lower().encode()).hexdigest()}"
     
@@ -71,8 +75,24 @@ async def handle_chat_stream(request: Request, question: str, mssv: str = Depend
     
     ACTIVE_SESSIONS.add(query_hash)
 
+    # 1. Quản lý Session ID
+    if not session_id:
+        current_session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
+    else:
+        current_session_id = session_id
+
+    # 2. Lưu câu hỏi của User vào Database
+    user_msg = ChatMessage(
+        mssv=mssv, 
+        session_id=current_session_id, 
+        role="user", 
+        content=question,
+        status=TaskStatus.COMPLETED
+    )
+    db.add(user_msg)
+    db.commit()
+
     async def event_generator():
-        session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
         
         try:
             #  1. Gọi Orchestrator lấy Task Plan
@@ -81,7 +101,7 @@ async def handle_chat_stream(request: Request, question: str, mssv: str = Depend
             yield "data: " + json.dumps({"event": "planner_start", "message": "Đang phân tích câu hỏi và lập kế hoạch..."}) + "\n\n"
             await asyncio.sleep(0.1)
             
-            plan = planner.create_plan(question, session_id)
+            plan = planner.create_plan(question, current_session_id)
             tasks_list = [{"task_id": t.task_id, "task_type": t.task_type, "query_intent": t.query_intent} for t in plan.tasks]
             
             yield "data: " + json.dumps({
@@ -168,18 +188,75 @@ async def handle_chat_stream(request: Request, question: str, mssv: str = Depend
 
             # 5. Gửi kết quả cuối cùng
             if await request.is_disconnected(): return
-            
+            with SessionLocal() as stream_db:
+                ai_msg = ChatMessage(
+                    mssv=mssv,
+                    session_id=current_session_id,
+                    role="assistant",
+                    content=final_answer,
+                    status=TaskStatus.COMPLETED
+                )
+                stream_db.add(ai_msg)
+                stream_db.commit()
             yield "data: " + json.dumps({
                 "event": "final_result",
                 "answer": final_answer,
                 "critic_score": report.score,
-                "debug_trace": trace_data
+                "debug_trace": trace_data,
+                "session_id": current_session_id
             }) + "\n\n"
 
         except Exception as e:
+            print(f"❌ Lỗi Stream ngầm: {e}")
             yield "data: " + json.dumps({"event": "error", "message": f"Lỗi hệ thống: {str(e)}"}) + "\n\n"
         finally:
             if query_hash in ACTIVE_SESSIONS:
                 ACTIVE_SESSIONS.remove(query_hash)
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+@router.get("/history/sessions")
+async def get_user_sessions(mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+    sessions = db.query(
+        ChatMessage.session_id,
+    ).filter(ChatMessage.mssv == mssv)\
+     .group_by(ChatMessage.session_id)\
+     .order_by(desc(func.max(ChatMessage.created_at))).all()
+
+    result = []
+    for (sess_id,) in sessions:
+        first_msg = db.query(ChatMessage).filter(
+            ChatMessage.session_id == sess_id, 
+            ChatMessage.role == "user"
+        ).order_by(ChatMessage.created_at.asc()).first()
+        
+        if first_msg:
+            title = first_msg.content[:40] + "..." if len(first_msg.content) > 40 else first_msg.content
+            result.append({
+                "session_id": sess_id,
+                "title": title
+            })
+            
+    return {"sessions": result}
+
+@router.get("/history/messages/{session_id}")
+async def get_session_messages(session_id: str, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+    messages = db.query(ChatMessage).filter(
+        ChatMessage.session_id == session_id,
+        ChatMessage.mssv == mssv
+    ).order_by(ChatMessage.created_at.asc()).all()
+    
+    if not messages:
+        raise HTTPException(status_code=404, detail="Không tìm thấy lịch sử chat")
+        
+    return {
+        "session_id": session_id,
+        "messages": [
+            {
+                "id": msg.id,
+                "role": msg.role,
+                "content": msg.content,
+                "created_at": msg.created_at
+            } for msg in messages
+        ]
+    }

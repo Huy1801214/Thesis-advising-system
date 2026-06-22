@@ -5,7 +5,10 @@ from core.security import limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi import _rate_limit_exceeded_handler
-
+from core.database import engine, Base
+import model.user 
+import model.chat_message
+Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Thesis Advising System API")
 
 app.add_middleware(

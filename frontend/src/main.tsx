@@ -18,7 +18,7 @@ import {
   Loader2,
   ChevronDown,
 } from "lucide-react";
-import { login, register, sendQuestion, uploadTranscript, ChatTraceItem, sendQuestionStream } from "./api";
+import { login, register, sendQuestion, uploadTranscript, ChatTraceItem, sendQuestionStream, getSessions, getSessionMessages } from "./api";
 import "./styles.css";
 
 type ThinkingStep = {
@@ -73,6 +73,8 @@ function App() {
   const [uploadErrorMessage, setUploadErrorMessage] = useState("");
   const [extractedGpa, setExtractedGpa] = useState<string | null>(null);
   const [extractedPassedCount, setExtractedPassedCount] = useState<number | null>(null);
+  const [sessions, setSessions] = useState<{session_id: string, title: string}[]>([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
 
   function toggleThinking(msgId: string) {
     setOpenThinkingMsgs((prev) => ({
@@ -149,6 +151,50 @@ function App() {
     setConfirmPassword("");
   }
 
+  useEffect(() => {
+    if (token) {
+      loadSessions();
+    }
+  }, [token]);
+
+  async function loadSessions() {
+    try {
+      const data = await getSessions(token!);
+      setSessions(data.sessions || []);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function handleSelectSession(sessionId: string) {
+    setCurrentSessionId(sessionId);
+    setChatError("");
+    try {
+      const data = await getSessionMessages(sessionId, token!);
+      const loadedMessages: ChatMessage[] = data.messages.map((m: any) => ({
+        id: m.id.toString(),
+        role: m.role,
+        content: m.content,
+      }));
+      setMessages(loadedMessages);
+    } catch (e) {
+      setChatError("Không thể tải tin nhắn của đoạn chat này.");
+    }
+  }
+
+  // Bắt đầu đoạn chat mới
+  function handleNewChat() {
+    setCurrentSessionId(null);
+    setMessages([
+      {
+        id: "welcome",
+        role: "assistant",
+        content: "Chào mừng bạn đến với hệ thống tư vấn khóa luận.",
+        sources: ["Hãy đặt câu hỏi về đề tài, quy trình, điều kiện thực hiện..."],
+      },
+    ]);
+  }
+
   async function handleAsk(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!token || !canSubmitQuestion) return;
@@ -172,7 +218,7 @@ function App() {
     let debugTrc: ChatTraceItem[] = [];
 
     try {
-      await sendQuestionStream(prompt, token, (event, data) => {
+      await sendQuestionStream(prompt, token, currentSessionId, (event, data) => {
         if (event === "planner_start") {
           setActiveThinkingSteps([
             { id: "planner", label: "Lập kế hoạch truy vấn (Planner)", status: "running" }
@@ -230,6 +276,17 @@ function App() {
           if (requiresClarification) {
             setTimeout(() => inputRef.current?.focus(), 100);
           }
+
+          if (data.session_id) {
+            if (currentSessionId !== data.session_id) {
+              setCurrentSessionId(data.session_id);
+              loadSessions(); 
+            }
+          }
+        }
+
+        else if (event === "error") {
+          setChatError(`Lỗi từ máy chủ: ${data.message}`);
         }
       });
 
@@ -310,6 +367,8 @@ function App() {
     setExtractedPassedCount(null);
     setActiveThinkingSteps([]);
     setOpenThinkingMsgs({});
+    setSessions([]);
+    setCurrentSessionId(null);
   }
 
   if (!token) {
@@ -455,6 +514,45 @@ function App() {
             <span>AI consultation</span>
           </div>
         </div>
+
+        <div className="history-container" style={{ margin: "20px 0", display: "flex", flexDirection: "column", gap: "10px" }}>
+          <button 
+            type="button" 
+            className="primary-button" 
+            style={{ width: "100%", padding: "10px", display: "flex", gap: "8px", justifyContent: "center" }}
+            onClick={handleNewChat}
+          >
+            <MessageSquareText size={16} />
+            Đoạn chat mới
+          </button>
+          
+          <div className="session-list" style={{ overflowY: "auto", maxHeight: "200px", display: "flex", flexDirection: "column", gap: "4px" }}>
+            <span style={{ fontSize: "0.8rem", color: "#666", fontWeight: "bold", padding: "4px 0" }}>LỊCH SỬ TRÒ CHUYỆN</span>
+            {sessions.map(s => (
+              <button 
+                key={s.session_id} 
+                onClick={() => handleSelectSession(s.session_id)}
+                style={{
+                  textAlign: "left",
+                  padding: "8px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: currentSessionId === s.session_id ? "#e0e7ff" : "transparent",
+                  color: currentSessionId === s.session_id ? "#3730a3" : "#333",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  fontSize: "0.9rem"
+                }}
+              >
+                <MessageSquareText size={14} style={{ display: "inline-block", marginRight: "6px", verticalAlign: "middle" }} />
+                {s.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="status-block">
           <span>Trạng thái</span>
           <strong>Đã đăng nhập</strong>
@@ -535,7 +633,7 @@ function App() {
           </div>
           <div className="live-pill">
             <span />
-            Backend ready
+            Backend ready 
           </div>
         </header>
 

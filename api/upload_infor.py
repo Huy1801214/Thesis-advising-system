@@ -1,5 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from sqlalchemy.orm import Session
 from core.security import verify_token, oauth2_scheme  # Dùng lại hàm Auth của bạn
+from core.database import get_db
+from model.student_profile import StudentProfile
 import shutil
 import os
 
@@ -9,7 +12,7 @@ from core.document_parser import extract_student_context
 router = APIRouter()
 
 # ==========================================
-# BỘ NHỚ TẠM (SESSION MEMORY)
+# BỘ NHỚ TẠM (SESSION MEMORY) - Dùng để tương thích ngược nếu cần
 # Lưu trữ bảng điểm của sinh viên theo dạng: { "20110001": {"passed_courses": [...], ...} }
 # ==========================================
 STUDENT_TRANSCRIPT_STORE = {}
@@ -21,7 +24,8 @@ def get_current_mssv(token: str = Depends(oauth2_scheme)):
 @router.post("/upload-transcript")
 async def upload_transcript(
     file: UploadFile = File(...), 
-    mssv: str = Depends(get_current_mssv)  # Bắt buộc sinh viên phải đăng nhập
+    mssv: str = Depends(get_current_mssv),  # Bắt buộc sinh viên phải đăng nhập
+    db: Session = Depends(get_db)
 ):
     print(f"📥 [API] Nhận file bảng điểm {file.filename} từ sinh viên {mssv}")
     
@@ -39,7 +43,21 @@ async def upload_transcript(
         if context["status"] != "success":
             raise HTTPException(status_code=400, detail=context["message"])
             
-        # 3. LƯU VÀO BỘ NHỚ TẠM (Gán thẳng vào MSSV)
+        # 3. LƯU VÀO CƠ SỞ DỮ LIỆU (Tìm kiếm và cập nhật hoặc tạo mới)
+        profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+        if not profile:
+            profile = StudentProfile(mssv=mssv)
+            db.add(profile)
+            
+        profile.cumulative_gpa = context["cumulative_gpa"]
+        profile.total_earned_credits = context["total_earned_credits"]
+        profile.passed_courses = context["passed_courses"]
+        profile.current_courses = context["current_courses"]
+        
+        db.commit()
+        db.refresh(profile)
+        
+        # Cập nhật bộ nhớ tạm tương thích ngược
         STUDENT_TRANSCRIPT_STORE[mssv] = {
             "cumulative_gpa": context["cumulative_gpa"],
             "total_earned_credits": context["total_earned_credits"],
@@ -60,3 +78,53 @@ async def upload_transcript(
         # 4. Xóa file ngay lập tức để bảo mật thông tin và tiết kiệm ổ cứng
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
+
+@router.get("/student-profile")
+async def get_student_profile(
+    mssv: str = Depends(get_current_mssv),
+    db: Session = Depends(get_db)
+):
+    profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+    if not profile:
+        return {
+            "status": "NOT_FOUND",
+            "message": "Sinh viên chưa tải lên bảng điểm.",
+            "data": None
+        }
+    
+    # Đồng bộ sang bộ nhớ tạm
+    STUDENT_TRANSCRIPT_STORE[mssv] = {
+        "cumulative_gpa": profile.cumulative_gpa,
+        "total_earned_credits": profile.total_earned_credits,
+        "passed_courses": profile.passed_courses,
+        "current_courses": profile.current_courses
+    }
+    
+    return {
+        "status": "SUCCESS",
+        "data": {
+            "gpa": profile.cumulative_gpa,
+            "total_passed": len(profile.passed_courses) if profile.passed_courses else 0
+        }
+    }
+
+@router.delete("/student-profile")
+async def delete_student_profile(
+    mssv: str = Depends(get_current_mssv),
+    db: Session = Depends(get_db)
+):
+    profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Không tìm thấy bảng điểm để xóa.")
+    
+    db.delete(profile)
+    db.commit()
+    
+    # Xóa khỏi bộ nhớ tạm
+    if mssv in STUDENT_TRANSCRIPT_STORE:
+        del STUDENT_TRANSCRIPT_STORE[mssv]
+        
+    return {
+        "status": "SUCCESS",
+        "message": "Đã xóa dữ liệu bảng điểm thành công!"
+    }

@@ -94,6 +94,22 @@ export async function sendQuestion(question: string, token: string) {
   return (await response.json()) as ChatResponse;
 }
 
+export async function getSessions(token: string) {
+  const response = await fetch(`${API_BASE_URL}/history/sessions`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Không thể tải danh sách lịch sử chat.");
+  return await response.json();
+}
+
+export async function getSessionMessages(sessionId: string, token: string) {
+  const response = await fetch(`${API_BASE_URL}/history/messages/${sessionId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Không thể tải chi tiết đoạn chat.");
+  return await response.json();
+}
+
 export type UploadTranscriptResponse = {
   status: string;
   message: string;
@@ -129,10 +145,13 @@ export async function uploadTranscript(file: File, token: string) {
 export async function sendQuestionStream(
   question: string,
   token: string,
+  sessionId: string | null,
   onEvent: (event: string, data: any) => void
 ): Promise<void> {
+  const url = `${API_BASE_URL}/chat/stream?question=${encodeURIComponent(question)}${sessionId ? `&session_id=${sessionId}` : ""}`;
+  
   const response = await fetch(
-    `${API_BASE_URL}/chat/stream?question=${encodeURIComponent(question)}`,
+    url,
     {
       method: "POST",
       headers: {

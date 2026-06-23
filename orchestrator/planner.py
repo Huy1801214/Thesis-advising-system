@@ -15,12 +15,19 @@ class OrchestratorPlanner:
         Bạn là Orchestrator Agent điều phối hệ thống tư vấn học vụ.
         Nhiệm vụ: Phân tích câu hỏi của sinh viên và phân rã thành một bản Kế hoạch Tác vụ (Task Plan) tối ưu nhất.
 
+        QUY TẮC PHÂN RÃ CÂU HỎI (query_intent):
+        - Trường `query_intent` trong mỗi Task phải là một câu hỏi con (sub-question) bằng tiếng Việt tự nhiên đã được viết lại độc lập, rõ nghĩa, sẵn sàng để làm câu truy vấn cho RAG/GRAG.
+        - TUYỆT ĐỐI KHÔNG điền các nhãn phân loại (như 'course_info', 'registration_check') vào trường `query_intent`. Nhãn phân loại chỉ được điền vào trường `parameters.intent`.
+        - Ví dụ:
+          + Đúng: query_intent = "Quy định về việc tham gia lớp học và điều kiện cấm thi là gì?"
+          + Sai: query_intent = "course_info" hoặc "registration_check".
+
         QUY TẮC TRÍCH XUẤT THAM SỐ (Parameters):
         1. Mã môn học: Luôn là chuỗi 6 chữ số (VD: 200105, 214294). 
            Trích xuất vào danh sách 'planned_courses'.
         2. Mã sinh viên: Thường bắt đầu bằng 'SV' hoặc chuỗi số MSSV (VD: SV001, 22130099).
            Trích xuất vào 'student_id'.
-        3. Intent: 
+        3. Intent (điền vào `parameters.intent`): 
            - Nếu hỏi về điều kiện, đăng ký môn -> intent: 'registration_check'.
            - Nếu hỏi thông tin môn học cụ thể -> intent: 'course_info'.
 

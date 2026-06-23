@@ -9,6 +9,7 @@ import asyncio
 from core.security import verify_token, oauth2_scheme, limiter
 from api.upload_infor import STUDENT_TRANSCRIPT_STORE
 from model.chat_message import ChatMessage, TaskStatus
+from model.student_profile import StudentProfile
 
 from orchestrator.planner import OrchestratorPlanner
 from orchestrator.executor import TaskExecutor
@@ -28,14 +29,22 @@ def get_current_mssv(token: str = Depends(oauth2_scheme)):
     return user_info.get("sub")
 
 @router.post("/chat")
-async def handle_chat(question: str, mssv: str = Depends(get_current_mssv)):
+async def handle_chat(question: str, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
     session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
     
     # 1. Gọi Orchestrator lấy Task Plan
     plan = planner.create_plan(question, session_id)
     
-    # Lấy dữ liệu điểm của sinh viên
-    student_data = STUDENT_TRANSCRIPT_STORE.get(mssv, {})
+    # Lấy dữ liệu điểm của sinh viên từ database
+    profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+    student_data = {}
+    if profile:
+        student_data = {
+            "cumulative_gpa": profile.cumulative_gpa,
+            "total_earned_credits": profile.total_earned_credits,
+            "passed_courses": profile.passed_courses,
+            "current_courses": profile.current_courses
+        }
     
     # 2. Định tuyết Task Plan cho Executor thực thi
     execution_result = await executor.execute_plan(plan, question, mssv, student_data)
@@ -114,7 +123,15 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
             # 2. Định tuyến Task Plan cho Executor thực thi
             if await request.is_disconnected(): return
             
-            student_data = STUDENT_TRANSCRIPT_STORE.get(mssv, {})
+            profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+            student_data = {}
+            if profile:
+                student_data = {
+                    "cumulative_gpa": profile.cumulative_gpa,
+                    "total_earned_credits": profile.total_earned_credits,
+                    "passed_courses": profile.passed_courses,
+                    "current_courses": profile.current_courses
+                }
             MAX_TASKS = 5
             safe_tasks = plan.tasks[:MAX_TASKS]
             

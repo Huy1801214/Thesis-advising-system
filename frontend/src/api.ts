@@ -196,4 +196,40 @@ export async function sendQuestionStream(
   }
 }
 
+export type StudentProfileResponse = {
+  status: string;
+  message?: string;
+  data?: {
+    gpa: string | number;
+    total_passed: number;
+  };
+};
+
+export async function getStudentProfile(token: string): Promise<StudentProfileResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/grag/student-profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (response.status === 401) {
+    throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+  }
+  if (!response.ok) {
+    throw new Error(await parseError(response, "Không thể tải thông tin bảng điểm."));
+  }
+  return (await response.json()) as StudentProfileResponse;
+}
+
+export async function deleteStudentProfile(token: string): Promise<{ status: string; message: string }> {
+  const response = await fetch(`${API_BASE_URL}/api/grag/student-profile`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (response.status === 401) {
+    throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+  }
+  if (!response.ok) {
+    throw new Error(await parseError(response, "Không thể xóa bảng điểm."));
+  }
+  return await response.json();
+}
+
 

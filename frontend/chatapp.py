@@ -102,10 +102,13 @@ else:
                     final_answer = data.get("answer", "Xin lỗi, hệ thống không thể tạo câu trả lời.")
                     critic_score = data.get("critic_score")
                     trace_data = data.get("debug_trace", [])
-                    
+                    is_clarifying = any(t.get("status") == "CLARIFYING" for t in trace_data)
                     # Hiển thị tin nhắn của AI
                     with st.chat_message("assistant"):
-                        st.markdown(final_answer)
+                        if is_clarifying:
+                            st.warning(f"**Hệ thống cần thêm thông tin:**\n\n{final_answer}", icon="⚠️")
+                        else:
+                            st.markdown(final_answer)
                         
                         # --- VŨ KHÍ BẢO VỆ ĐỒ ÁN: SHOW LUỒNG SUY LUẬN ---
                         if trace_data:
@@ -119,7 +122,7 @@ else:
                                     st.caption(f"{status_icon} **[{t.get('task_type')}]** {t.get('query_intent')}")
                         
                     # Lưu lại vào bộ nhớ lịch sử
-                    st.session_state.messages.append({"role": "assistant", "content": final_answer})
+                    st.session_state.messages.append({"role": "assistant", "content": final_answer}, "is_clarify": is_clarifying)
                 else:
                     st.error(f"Lỗi {res_chat.status_code}: {res_chat.text}")
             except Exception as e:

@@ -14,11 +14,12 @@ class TaskParameters(BaseModel):
     original_question: Optional[str] = Field(default=None, description="Original user question")
     passed_courses: List[str] = Field(default_factory=list, description="Courses the student has passed")
     cumulative_gpa: Optional[Union[float, str]] = Field(default=None, description="Student cumulative GPA")
+    clarification_message: Optional[str] = Field(default=None, description="Câu hỏi ngược lại cho sinh viên nếu cần làm rõ")
 
 
 class Task(BaseModel):
     task_id: str = Field(description="Unique task id, for example TASK_01")
-    task_type: Literal["RAG", "GRAG"] = Field(description="Worker type")
+    task_type: Literal["RAG", "GRAG", "CLARIFY"] = Field(description="Worker type")
     query_intent: str = Field(
         description="Standalone rewritten sub-question for retrieval and synthesis"
     )
@@ -30,6 +31,9 @@ class Task(BaseModel):
 
 class TaskPlan(BaseModel):
     session_id: str
+    reasoning_summary: str = Field(description="Tóm tắt ngắn gọn lý do tại sao lại lập kế hoạch định tuyến này")
+    confidence_score: float = Field(description="Độ tự tin của kế hoạch, thang điểm từ 0.0 đến 1.0")
+    needs_clarification: bool = Field(description="True nếu câu hỏi quá mơ hồ, không đủ dữ kiện để query và cần hỏi lại sinh viên")
     tasks: List[Task]
 
 

@@ -12,6 +12,7 @@ openpyxl
 python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
+slowapi
 
 # --- Database (SQLAlchemy + Postgres) ---
 sqlalchemy

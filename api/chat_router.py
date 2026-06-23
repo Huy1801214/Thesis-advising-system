@@ -1,21 +1,27 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import StreamingResponse
 import uuid
+import hashlib
 import json
+from sqlalchemy.orm import Session
+from core.database import get_db, SessionLocal
 import asyncio
-from core.security import verify_token, oauth2_scheme
+from core.security import verify_token, oauth2_scheme, limiter
 from api.upload_infor import STUDENT_TRANSCRIPT_STORE
+from model.chat_message import ChatMessage, TaskStatus
 
 from orchestrator.planner import OrchestratorPlanner
 from orchestrator.executor import TaskExecutor
 from orchestrator.synthesizer import FinalSynthesizer
 from orchestrator.critic import CriticAgent
+from sqlalchemy import desc, func
 
 router = APIRouter()
 planner = OrchestratorPlanner()
 executor = TaskExecutor()
 synthesizer = FinalSynthesizer()
 critic = CriticAgent()
+ACTIVE_SESSIONS = set()
 
 def get_current_mssv(token: str = Depends(oauth2_scheme)):
     user_info = verify_token(token) 
@@ -56,40 +62,69 @@ async def handle_chat(question: str, mssv: str = Depends(get_current_mssv)):
     }
 
 @router.post("/chat/stream")
-async def handle_chat_stream(question: str, mssv: str = Depends(get_current_mssv)):
+@limiter.limit("3/minute") 
+async def handle_chat_stream(request: Request, question: str, session_id: str = None, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+    print(f"[RateLimit] Đang kiểm soát lưu lượng cho sinh viên: {mssv}")
+    query_hash = f"{mssv}_{hashlib.md5(question.strip().lower().encode()).hexdigest()}"
+    
+    # Chặn nếu sinh viên bấm F5
+    if query_hash in ACTIVE_SESSIONS:
+        raise HTTPException(status_code=409, 
+            detail="Hệ thống đang xử lý câu hỏi này, vui lòng đợi trong giây lát để tránh quá tải."
+        )
+    
+    ACTIVE_SESSIONS.add(query_hash)
+
+    # 1. Quản lý Session ID
+    if not session_id:
+        current_session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
+    else:
+        current_session_id = session_id
+
+    # 2. Lưu câu hỏi của User vào Database
+    user_msg = ChatMessage(
+        mssv=mssv, 
+        session_id=current_session_id, 
+        role="user", 
+        content=question,
+        status=TaskStatus.COMPLETED
+    )
+    db.add(user_msg)
+    db.commit()
+
     async def event_generator():
-        session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
-        
-        # 1. Gọi Orchestrator lấy Task Plan
-        yield "data: " + json.dumps({"event": "planner_start", "message": "Đang phân tích câu hỏi và lập kế hoạch..."}) + "\n\n"
-        await asyncio.sleep(0.1)
         
         try:
-            plan = planner.create_plan(question, session_id)
+            #  1. Gọi Orchestrator lấy Task Plan
+            if await request.is_disconnected(): return 
+            
+            yield "data: " + json.dumps({"event": "planner_start", "message": "Đang phân tích câu hỏi và lập kế hoạch..."}) + "\n\n"
+            await asyncio.sleep(0.1)
+            
+            plan = planner.create_plan(question, current_session_id)
             tasks_list = [{"task_id": t.task_id, "task_type": t.task_type, "query_intent": t.query_intent} for t in plan.tasks]
+            
             yield "data: " + json.dumps({
                 "event": "planner_done", 
                 "message": f"Đã lập kế hoạch gồm {len(tasks_list)} tác vụ.",
                 "tasks": tasks_list
             }) + "\n\n"
             await asyncio.sleep(0.1)
-        except Exception as e:
-            yield "data: " + json.dumps({"event": "error", "message": f"Lỗi lập kế hoạch: {str(e)}"}) + "\n\n"
-            return
 
-        # 2. Định tuyến Task Plan cho Executor thực thi
-        student_data = STUDENT_TRANSCRIPT_STORE.get(mssv, {})
-        MAX_TASKS = 5
-        safe_tasks = plan.tasks[:MAX_TASKS]
-        
-        yield "data: " + json.dumps({
-            "event": "executor_running", 
-            "message": "Đang chạy song song các RAG & GRAG Agent...",
-            "running_tasks": [t.task_id for t in safe_tasks]
-        }) + "\n\n"
-        await asyncio.sleep(0.1)
-        
-        try:
+            # 2. Định tuyến Task Plan cho Executor thực thi
+            if await request.is_disconnected(): return
+            
+            student_data = STUDENT_TRANSCRIPT_STORE.get(mssv, {})
+            MAX_TASKS = 5
+            safe_tasks = plan.tasks[:MAX_TASKS]
+            
+            yield "data: " + json.dumps({
+                "event": "executor_running", 
+                "message": "Đang chạy song song các Agent thực thi câu hỏi của bạn...",
+                "running_tasks": [t.task_id for t in safe_tasks]
+            }) + "\n\n"
+            await asyncio.sleep(0.1)
+            
             task_coroutines = [
                 executor._execute_single_task(task, question, mssv, student_data) 
                 for task in safe_tasks
@@ -98,6 +133,10 @@ async def handle_chat_stream(question: str, mssv: str = Depends(get_current_mssv
             trace_data = []
             if task_coroutines:
                 for future in asyncio.as_completed(task_coroutines):
+                    # Nếu sinh viên tắt web -> hủy luồng
+                    if await request.is_disconnected(): 
+                        return 
+                        
                     task_res = await future
                     trace_data.append(task_res)
                     yield "data: " + json.dumps({
@@ -112,28 +151,24 @@ async def handle_chat_stream(question: str, mssv: str = Depends(get_current_mssv
                     "message": "Không có Agent nào cần thực thi."
                 }) + "\n\n"
                 await asyncio.sleep(0.1)
-                
-        except Exception as e:
-            yield "data: " + json.dumps({"event": "error", "message": f"Lỗi thực thi Agent: {str(e)}"}) + "\n\n"
-            return
+
+            # 3. Tổng hợp dữ liệu (Synthesizer)
+            if await request.is_disconnected(): return
             
-        # 3. Tổng hợp dữ liệu (Synthesizer)
-        yield "data: " + json.dumps({"event": "synthesizer_start", "message": "Đang tổng hợp thông tin câu trả lời..."}) + "\n\n"
-        await asyncio.sleep(0.1)
-        
-        try:
+            yield "data: " + json.dumps({"event": "synthesizer_start", "message": "Đang tổng hợp thông tin câu trả lời..."}) + "\n\n"
+            await asyncio.sleep(0.1)
+            
             final_answer = await synthesizer.synthesize(question, trace_data)
+            
             yield "data: " + json.dumps({"event": "synthesizer_done", "message": "Đã tổng hợp xong câu trả lời sơ bộ."}) + "\n\n"
             await asyncio.sleep(0.1)
-        except Exception as e:
-            yield "data: " + json.dumps({"event": "error", "message": f"Lỗi tổng hợp: {str(e)}"}) + "\n\n"
-            return
+
+            # 4. Kiểm duyệt và phản biện (Critic)
+            if await request.is_disconnected(): return
             
-        # 4. Kiểm duyệt và phản biện (Critic)
-        yield "data: " + json.dumps({"event": "critic_start", "message": "Đang gửi qua Critic Agent để kiểm duyệt..."}) + "\n\n"
-        await asyncio.sleep(0.1)
-        
-        try:
+            yield "data: " + json.dumps({"event": "critic_start", "message": "Đang gửi qua Critic Agent để kiểm duyệt..."}) + "\n\n"
+            await asyncio.sleep(0.1)
+            
             report = await critic.review(
                 original_question=question, 
                 final_answer=final_answer, 
@@ -141,9 +176,7 @@ async def handle_chat_stream(question: str, mssv: str = Depends(get_current_mssv
             )
             
             if not report.passed:
-                print(f"⚠️ Critic đã bắt lỗi: {report.issues}")
                 if report.revised_answer:
-                    print("🔄 Đang ghi đè bằng câu trả lời đã được Critic sửa đổi.")
                     final_answer = report.revised_answer
                     
             yield "data: " + json.dumps({
@@ -152,16 +185,78 @@ async def handle_chat_stream(question: str, mssv: str = Depends(get_current_mssv
                 "critic_score": report.score
             }) + "\n\n"
             await asyncio.sleep(0.1)
+
+            # 5. Gửi kết quả cuối cùng
+            if await request.is_disconnected(): return
+            with SessionLocal() as stream_db:
+                ai_msg = ChatMessage(
+                    mssv=mssv,
+                    session_id=current_session_id,
+                    role="assistant",
+                    content=final_answer,
+                    status=TaskStatus.COMPLETED
+                )
+                stream_db.add(ai_msg)
+                stream_db.commit()
+            yield "data: " + json.dumps({
+                "event": "final_result",
+                "answer": final_answer,
+                "critic_score": report.score,
+                "debug_trace": trace_data,
+                "session_id": current_session_id
+            }) + "\n\n"
+
         except Exception as e:
-            yield "data: " + json.dumps({"event": "error", "message": f"Lỗi kiểm duyệt: {str(e)}"}) + "\n\n"
-            return
-            
-        # Gửi kết quả cuối cùng
-        yield "data: " + json.dumps({
-            "event": "final_result",
-            "answer": final_answer,
-            "critic_score": report.score,
-            "debug_trace": trace_data
-        }) + "\n\n"
+            print(f"❌ Lỗi Stream ngầm: {e}")
+            yield "data: " + json.dumps({"event": "error", "message": f"Lỗi hệ thống: {str(e)}"}) + "\n\n"
+        finally:
+            if query_hash in ACTIVE_SESSIONS:
+                ACTIVE_SESSIONS.remove(query_hash)
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+@router.get("/history/sessions")
+async def get_user_sessions(mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+    sessions = db.query(
+        ChatMessage.session_id,
+    ).filter(ChatMessage.mssv == mssv)\
+     .group_by(ChatMessage.session_id)\
+     .order_by(desc(func.max(ChatMessage.created_at))).all()
+
+    result = []
+    for (sess_id,) in sessions:
+        first_msg = db.query(ChatMessage).filter(
+            ChatMessage.session_id == sess_id, 
+            ChatMessage.role == "user"
+        ).order_by(ChatMessage.created_at.asc()).first()
+        
+        if first_msg:
+            title = first_msg.content[:40] + "..." if len(first_msg.content) > 40 else first_msg.content
+            result.append({
+                "session_id": sess_id,
+                "title": title
+            })
+            
+    return {"sessions": result}
+
+@router.get("/history/messages/{session_id}")
+async def get_session_messages(session_id: str, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+    messages = db.query(ChatMessage).filter(
+        ChatMessage.session_id == session_id,
+        ChatMessage.mssv == mssv
+    ).order_by(ChatMessage.created_at.asc()).all()
+    
+    if not messages:
+        raise HTTPException(status_code=404, detail="Không tìm thấy lịch sử chat")
+        
+    return {
+        "session_id": session_id,
+        "messages": [
+            {
+                "id": msg.id,
+                "role": msg.role,
+                "content": msg.content,
+                "created_at": msg.created_at
+            } for msg in messages
+        ]
+    }

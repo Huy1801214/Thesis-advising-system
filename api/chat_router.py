@@ -90,6 +90,13 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
     else:
         current_session_id = session_id
 
+    # Lấy lịch sử hội thoại 
+    history_msgs = db.query(ChatMessage).filter(
+        ChatMessage.session_id == current_session_id,
+        ChatMessage.mssv == mssv
+    ).order_by(ChatMessage.created_at.asc()).all()[-6:]
+    chat_history_str = "\n".join([f"{m.role.upper()}: {m.content}" for m in history_msgs])
+
     # 2. Lưu câu hỏi của User vào Database
     user_msg = ChatMessage(
         mssv=mssv, 
@@ -110,7 +117,9 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
             yield "data: " + json.dumps({"event": "planner_start", "message": "Đang phân tích câu hỏi và lập kế hoạch..."}) + "\n\n"
             await asyncio.sleep(0.1)
             
-            plan = planner.create_plan(question, current_session_id)
+            standalone_question = planner.condense_question(question, chat_history_str)
+            
+            plan = planner.create_plan(standalone_question, current_session_id)
             tasks_list = [{"task_id": t.task_id, "task_type": t.task_type, "query_intent": t.query_intent} for t in plan.tasks]
             
             yield "data: " + json.dumps({
@@ -143,7 +152,7 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
             await asyncio.sleep(0.1)
             
             task_coroutines = [
-                executor._execute_single_task(task, question, mssv, student_data) 
+                executor._execute_single_task(task, standalone_question, mssv, student_data) 
                 for task in safe_tasks
             ]
             
@@ -175,7 +184,7 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
             yield "data: " + json.dumps({"event": "synthesizer_start", "message": "Đang tổng hợp thông tin câu trả lời..."}) + "\n\n"
             await asyncio.sleep(0.1)
             
-            final_answer = await synthesizer.synthesize(question, trace_data)
+            final_answer = await synthesizer.synthesize(standalone_question, trace_data)
             
             yield "data: " + json.dumps({"event": "synthesizer_done", "message": "Đã tổng hợp xong câu trả lời sơ bộ."}) + "\n\n"
             await asyncio.sleep(0.1)
@@ -187,7 +196,7 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
             await asyncio.sleep(0.1)
             
             report = await critic.review(
-                original_question=question, 
+                original_question=standalone_question, 
                 final_answer=final_answer, 
                 trace=trace_data
             )

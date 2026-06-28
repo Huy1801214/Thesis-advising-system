@@ -8,7 +8,9 @@ from workers import grag_tools
 CUSTOM_ALIASES = {
     "python": "Lập trình Python",
     "ctdl & gt": "Cấu trúc dữ liệu",
-    "ctdl&gt": "Cấu trúc dữ liệu"
+    "ctdl&gt": "Cấu trúc dữ liệu",
+    "phân tích thiết kế hệ thống thông tin": "Phân tích và thiết kế hệ thống thông tin (a)",
+    "khóa luận tốt nghiệp": "Khóa luận tốt nghiệp"
 }
 
 class EntityExtractor:

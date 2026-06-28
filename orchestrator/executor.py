@@ -4,7 +4,7 @@ from workers.rag_worker import RAGEngine
 from workers.grag_worker import GRAGEngine
 from workers.llm_extractor import EntityExtractor
 
-GLOBAL_DB_SEMAPHORE = asyncio.Semaphore(20)
+GLOBAL_DB_SEMAPHORE = asyncio.Semaphore(30)
 TASK_TIMEOUT = 15.0
 
 def task_parameters_to_dict(parameters: Any) -> Dict[str, Any]:

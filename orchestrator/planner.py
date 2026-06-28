@@ -9,6 +9,30 @@ class OrchestratorPlanner:
     def __init__(self):
         self.llm = build_chat_model(temperature=0)
         self.planner_chain = self.llm.with_structured_output(TaskPlan, method="function_calling")
+        self.condense_llm = build_chat_model(temperature=0)
+
+    def condense_question(self, question: str, chat_history: str) -> str:
+        if not chat_history or not chat_history.strip():
+            return question
+            
+        system_prompt = f"""
+        Bạn là trợ lý AI chuyên phân tích ngữ cảnh hội thoại.
+        Nhiệm vụ: Dựa vào Lịch sử trò chuyện, hãy viết lại "Câu hỏi mới nhất" thành một câu hỏi độc lập (Standalone Question), đầy đủ ý nghĩa, sao cho người đọc không cần xem lịch sử vẫn hiểu được sinh viên đang hỏi về môn học/vấn đề gì.
+        Lưu ý:
+        - Nếu câu hỏi mới nhất có chứa các từ ám chỉ (môn đó, môn này, kỳ trước, điều kiện đó,...), hãy thay thế bằng danh từ cụ thể từ lịch sử.
+        - Nếu câu hỏi mới nhất đã đủ rõ ràng, giữ nguyên.
+        - CHỈ TRẢ VỀ CÂU HỎI ĐÃ VIẾT LẠI, không giải thích gì thêm.
+        
+        Lịch sử trò chuyện:
+        {chat_history}
+        
+        Câu hỏi mới nhất: {question}
+        """
+        res = self.condense_llm.invoke(system_prompt)
+        standalone_q = res.content.strip()
+        print(f"Lịch sử hội thoại:\n{chat_history}")
+        print(f"Đã viết lại câu hỏi: {standalone_q}")
+        return standalone_q
 
     def create_plan(self, question: str, session_id: str) -> TaskPlan:
         system_prompt = f"""
@@ -23,24 +47,25 @@ class OrchestratorPlanner:
           + Sai: query_intent = "course_info" hoặc "registration_check".
 
         QUY TẮC TRÍCH XUẤT THAM SỐ (Parameters):
-        1. Mã môn học: Luôn là chuỗi 6 chữ số (VD: 200105, 214294). 
-           Trích xuất vào danh sách 'planned_courses'.
-        2. Mã sinh viên: Thường bắt đầu bằng 'SV' hoặc chuỗi số MSSV (VD: SV001, 22130099).
+        1. Mã môn học: NẾU TRONG CÂU HỎI có chứa mã số 6 chữ số, trích xuất vào 'planned_courses'. TUYỆT ĐỐI KHÔNG TỰ BỊA RA MÃ MÔN HỌC HOẶC LẤY TỪ VÍ DỤ NẾU NGƯỜI DÙNG KHÔNG CUNG CẤP! Bỏ trống nếu không có.
+        2. Tên môn học: Trích xuất TÊN môn học vào trường 'course_name' (VD: "Cơ sở dữ liệu", "Phân tích thiết kế hệ thống thông tin", "Khóa luận tốt nghiệp"). Nếu sinh viên chỉ nói tên môn mà không nói mã, hãy bỏ trống 'planned_courses' và 'course_code', chỉ điền 'course_name'.
+        3. Mã sinh viên: Thường bắt đầu bằng 'SV' hoặc chuỗi số MSSV (VD: SV001, 22130099).
            Trích xuất vào 'student_id'.
-        3. Intent (điền vào `parameters.intent`): 
-           - Nếu hỏi về điều kiện, đăng ký môn -> intent: 'registration_check'.
-           - Nếu hỏi thông tin môn học cụ thể -> intent: 'course_info'.
+        4. Intent (BẮT BUỘC ĐIỀN vào `parameters.intent`): 
+           - Nếu hỏi về số tín chỉ, số tiết, đặc điểm của MỘT môn học cụ thể (kể cả Khóa luận) -> intent: 'course_info'.
+           - Nếu hỏi về điều kiện đăng ký môn, kiểm tra lộ trình, tư vấn học phần -> intent: 'registration_check'.
 
          GIỚI HẠN TỐI ĐA (CRITICAL):
         - Chỉ sinh ra TỐI ĐA 5 tác vụ (tasks) cho mỗi câu hỏi. Tuyệt đối không sinh nhiều hơn để tránh nghẽn I/O hệ thống.
 
         Quy tắc phân loại nhiệm vụ (Task Type):
-         1. Chọn "GRAG" (Graph RAG) NẾU câu hỏi ĐÒI HỎI SUY LUẬN LOGIC HOẶC RÀNG BUỘC MÔN HỌC:
+         1. Chọn "GRAG" (Graph RAG) NẾU câu hỏi ĐÒI HỎI SUY LUẬN LOGIC, RÀNG BUỘC MÔN HỌC HOẶC THÔNG TIN VỀ 1 MÔN CỤ THỂ:
+         - BẤT KỲ câu hỏi nào về "Khóa luận tốt nghiệp", "Đồ án", "Thực tập" hoặc 1 môn học có tên cụ thể (Hỏi về số tín chỉ, điều kiện, mã môn).
          - Gợi ý lộ trình, hỏi "nên học môn gì tiếp theo", tư vấn dựa trên danh sách môn đã học.
          - Tên môn học, mã môn học (VD: Cơ sở dữ liệu, CTDL, Toán cao cấp...).
          - Điều kiện tiên quyết, học trước, học song hành.
          - Đăng ký môn học, xung đột lịch học.
-         - Số tín chỉ, tính toán tổng tín chỉ đã tích lũy, GPA.
+         - Tính toán tổng tín chỉ đã tích lũy, GPA (dựa trên bảng điểm).
 
         2. Chọn "RAG" (Vector RAG) NẾU câu hỏi CHỈ TRA CỨU QUY CHẾ/VĂN BẢN (Không dính tới môn học cụ thể):
            - Các quy chế chung (VD: Bao nhiêu điểm thì bị đuổi học? Điều kiện xét học bổng? Quy định bảo lưu?).

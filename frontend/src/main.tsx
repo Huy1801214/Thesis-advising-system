@@ -106,6 +106,7 @@ function App() {
   const [extractedPassedCount, setExtractedPassedCount] = useState<number | null>(null);
   const [sessions, setSessions] = useState<{session_id: string, title: string}[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [chatMode, setChatMode] = useState<"agent" | "rag">("agent");
 
   // Messages thread list
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -322,7 +323,7 @@ function App() {
     let debugTrc: ChatTraceItem[] = [];
 
     try {
-      await sendQuestionStream(prompt, token, currentSessionId, (event, data) => {
+      await sendQuestionStream(prompt, token, currentSessionId, chatMode, (event, data) => {
         if (event === "planner_start") {
           setActiveThinkingSteps([
             { id: "planner", label: "Lập kế hoạch truy vấn (Planner)", status: "running" }
@@ -940,6 +941,27 @@ function App() {
           </div>
           
           <div className="chat-header-right">
+            <div className="model-selector">
+              <button 
+                type="button" 
+                className={`selector-btn ${chatMode === "agent" ? "active" : ""}`}
+                onClick={() => setChatMode("agent")}
+                title="Chế độ Multi-Agent"
+              >
+                <Sparkles size={14} />
+                <span>Multi-Agent</span>
+              </button>
+              <button 
+                type="button" 
+                className={`selector-btn ${chatMode === "rag" ? "active" : ""}`}
+                onClick={() => setChatMode("rag")}
+                title="Chế độ Thuần RAG (Baseline)"
+              >
+                <BookOpenCheck size={14} />
+                <span>Thuần RAG</span>
+              </button>
+            </div>
+
             <div className="live-pill">
               <span />
               AI Core Online

@@ -146,9 +146,10 @@ export async function sendQuestionStream(
   question: string,
   token: string,
   sessionId: string | null,
+  mode: "agent" | "rag",
   onEvent: (event: string, data: any) => void
 ): Promise<void> {
-  const url = `${API_BASE_URL}/chat/stream?question=${encodeURIComponent(question)}${sessionId ? `&session_id=${sessionId}` : ""}`;
+  const url = `${API_BASE_URL}/chat/stream?question=${encodeURIComponent(question)}&mode=${mode}${sessionId ? `&session_id=${sessionId}` : ""}`;
   
   const response = await fetch(
     url,

@@ -29,50 +29,63 @@ def get_current_mssv(token: str = Depends(oauth2_scheme)):
     return user_info.get("sub")
 
 @router.post("/chat")
-async def handle_chat(question: str, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+async def handle_chat(question: str, mode: str = "agent", mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
     session_id = f"SES_{mssv}_{uuid.uuid4().hex[:8]}"
     
-    # 1. Gọi Orchestrator lấy Task Plan
-    plan = planner.create_plan(question, session_id)
-    
-    # Lấy dữ liệu điểm của sinh viên từ database
-    profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
-    student_data = {}
-    if profile:
-        student_data = {
-            "cumulative_gpa": profile.cumulative_gpa,
-            "total_earned_credits": profile.total_earned_credits,
-            "passed_courses": profile.passed_courses,
-            "current_courses": profile.current_courses
-        }
-    
-    # 2. Định tuyết Task Plan cho Executor thực thi
-    execution_result = await executor.execute_plan(plan, question, mssv, student_data)
-    trace_data = execution_result["tasks_execution_info"]
-    
-    final_answer = await synthesizer.synthesize(question, trace_data)
-    report = await critic.review(
-        original_question=question, 
-        final_answer=final_answer, 
-        trace=trace_data
-    )
+    if mode == "rag":
+        # Pure RAG Baseline pipeline
+        final_answer = await executor.rag_agent.search_and_answer(question)
+        trace_data = [{
+            "task_id": "RAG_BASE",
+            "task_type": "RAG",
+            "query_intent": question,
+            "raw_data": f"--- Dữ liệu từ Sổ tay ({question}) ---\n{final_answer}",
+            "status": "SUCCESS"
+        }]
+        critic_score = 1.0
+    else:
+        # 1. Gọi Orchestrator lấy Task Plan
+        plan = planner.create_plan(question, session_id)
+        
+        # Lấy dữ liệu điểm của sinh viên từ database
+        profile = db.query(StudentProfile).filter(StudentProfile.mssv == mssv).first()
+        student_data = {}
+        if profile:
+            student_data = {
+                "cumulative_gpa": profile.cumulative_gpa,
+                "total_earned_credits": profile.total_earned_credits,
+                "passed_courses": profile.passed_courses,
+                "current_courses": profile.current_courses
+            }
+        
+        # 2. Định tuyết Task Plan cho Executor thực thi
+        execution_result = await executor.execute_plan(plan, question, mssv, student_data)
+        trace_data = execution_result["tasks_execution_info"]
+        
+        final_answer = await synthesizer.synthesize(question, trace_data)
+        report = await critic.review(
+            original_question=question, 
+            final_answer=final_answer, 
+            trace=trace_data
+        )
 
-    # 3. Trả về cho Frontend
-    if not report.passed:
-        print(f"⚠️ Critic đã bắt lỗi: {report.issues}")
-        if report.revised_answer:
-            print("🔄 Đang ghi đè bằng câu trả lời đã được Critic sửa đổi.")
-            final_answer = report.revised_answer
+        # 3. Trả về cho Frontend
+        if not report.passed:
+            print(f"⚠️ Critic đã bắt lỗi: {report.issues}")
+            if report.revised_answer:
+                print("🔄 Đang ghi đè bằng câu trả lời đã được Critic sửa đổi.")
+                final_answer = report.revised_answer
+        critic_score = report.score
 
     return {
         "answer": final_answer,
-        "critic_score": report.score,
+        "critic_score": critic_score,
         "debug_trace": trace_data
     }
 
 @router.post("/chat/stream")
 @limiter.limit("3/minute") 
-async def handle_chat_stream(request: Request, question: str, session_id: str = None, mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
+async def handle_chat_stream(request: Request, question: str, session_id: str = None, mode: str = "agent", mssv: str = Depends(get_current_mssv), db: Session = Depends(get_db)):
     print(f"[RateLimit] Đang kiểm soát lưu lượng cho sinh viên: {mssv}")
     query_hash = f"{mssv}_{hashlib.md5(question.strip().lower().encode()).hexdigest()}"
     
@@ -104,6 +117,73 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
     async def event_generator():
         
         try:
+            if mode == "rag":
+                # Pure RAG Baseline pipeline stream
+                if await request.is_disconnected(): return
+                yield "data: " + json.dumps({"event": "planner_start", "message": "Đang kết nối cơ sở dữ liệu (Chế độ Thuần RAG)..."}) + "\n\n"
+                await asyncio.sleep(0.1)
+                
+                tasks_list = [{"task_id": "RAG_BASE", "task_type": "RAG", "query_intent": question}]
+                yield "data: " + json.dumps({
+                    "event": "planner_done",
+                    "message": "Truy cập công cụ tìm kiếm RAG.",
+                    "tasks": tasks_list
+                }) + "\n\n"
+                await asyncio.sleep(0.1)
+                
+                if await request.is_disconnected(): return
+                yield "data: " + json.dumps({
+                    "event": "executor_running",
+                    "message": "Đang tìm kiếm tài liệu học vụ bằng Vector DB...",
+                    "running_tasks": ["RAG_BASE"]
+                }) + "\n\n"
+                await asyncio.sleep(0.1)
+                
+                # Gọi thẳng RAG Agent
+                final_answer = await executor.rag_agent.search_and_answer(question)
+                
+                task_res = {
+                    "task_id": "RAG_BASE",
+                    "task_type": "RAG",
+                    "query_intent": question,
+                    "raw_data": f"--- Dữ liệu từ Sổ tay ({question}) ---\n{final_answer}",
+                    "status": "SUCCESS"
+                }
+                
+                yield "data: " + json.dumps({
+                    "event": "task_completed",
+                    "message": "Đã tìm kiếm xong tài liệu.",
+                    "task": task_res
+                }) + "\n\n"
+                await asyncio.sleep(0.1)
+                
+                # Synthesizer dummy events to match step styles
+                yield "data: " + json.dumps({"event": "synthesizer_start", "message": "Đang hoàn thiện câu trả lời..."}) + "\n\n"
+                await asyncio.sleep(0.1)
+                yield "data: " + json.dumps({"event": "synthesizer_done", "message": "Hoàn tất."}) + "\n\n"
+                await asyncio.sleep(0.1)
+                
+                if await request.is_disconnected(): return
+                with SessionLocal() as stream_db:
+                    ai_msg = ChatMessage(
+                        mssv=mssv,
+                        session_id=current_session_id,
+                        role="assistant",
+                        content=final_answer,
+                        status=TaskStatus.COMPLETED
+                    )
+                    stream_db.add(ai_msg)
+                    stream_db.commit()
+                    
+                yield "data: " + json.dumps({
+                    "event": "final_result",
+                    "answer": final_answer,
+                    "critic_score": 1.0,
+                    "debug_trace": [task_res],
+                    "session_id": current_session_id
+                }) + "\n\n"
+                return
+
             #  1. Gọi Orchestrator lấy Task Plan
             if await request.is_disconnected(): return 
             

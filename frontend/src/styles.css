@@ -1538,3 +1538,53 @@ body.dark pre code {
   background-color: var(--bg-app);
   border-color: var(--border-color);
 }
+
+/* -------------------------------------------------------------
+ * Model Selector (Multi-Agent vs Pure RAG)
+ * ------------------------------------------------------------- */
+.model-selector {
+  display: flex;
+  background-color: var(--bubble-ai);
+  padding: 3px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  align-items: center;
+  gap: 2px;
+  margin-right: 12px;
+}
+
+.model-selector .selector-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.2s var(--transition-bezier);
+}
+
+.model-selector .selector-btn.active {
+  background-color: var(--bg-card);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.model-selector .selector-btn:hover:not(.active) {
+  color: var(--text-main);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+body.dark .model-selector .selector-btn:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 600px) {
+  .model-selector .selector-btn span {
+    display: none;
+  }
+  .model-selector .selector-btn {
+    padding: 6px 8px;
+  }
+}

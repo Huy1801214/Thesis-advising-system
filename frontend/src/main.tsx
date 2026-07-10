@@ -27,7 +27,7 @@ import {
   Check,
   FileText
 } from "lucide-react";
-import { login, register, sendQuestion, uploadTranscript, ChatTraceItem, sendQuestionStream, getSessions, getSessionMessages, getStudentProfile, deleteStudentProfile } from "./api";
+import { login, register, sendQuestion, uploadTranscript, ChatTraceItem, sendQuestionStream, getSessions, getSessionMessages, getStudentProfile, deleteStudentProfile, updateStudentProfile, getCareersList } from "./api";
 import "./styles.css";
 
 type ThinkingStep = {
@@ -107,6 +107,15 @@ function App() {
   const [sessions, setSessions] = useState<{session_id: string, title: string}[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [chatMode, setChatMode] = useState<"agent" | "rag">("agent");
+  const [isProfileExpanded, setIsProfileExpanded] = useState(false);
+  const [studentMajor, setStudentMajor] = useState<string | null>(null);
+  const [studentTargetCareer, setStudentTargetCareer] = useState<string | null>(null);
+  const [studentInterests, setStudentInterests] = useState<string | null>(null);
+  const [editMajor, setEditMajor] = useState("");
+  const [editTargetCareer, setEditTargetCareer] = useState("");
+  const [editInterests, setEditInterests] = useState("");
+  const [careersList, setCareersList] = useState<string[]>([]);
+  const [viewMode, setViewMode] = useState<"chat" | "profile">("chat");
 
   // Messages thread list
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -213,21 +222,61 @@ function App() {
     if (token) {
       loadSessions();
       loadStudentProfile();
+      loadCareersList();
     }
   }, [token]);
+
+  async function loadCareersList() {
+    try {
+      const res = await getCareersList(token!);
+      if (res.status === "SUCCESS") {
+        setCareersList(res.careers || []);
+      }
+    } catch (e) {
+      console.error("Không thể tải danh sách ngành nghề tuyển dụng:", e);
+    }
+  }
 
   async function loadStudentProfile() {
     try {
       const res = await getStudentProfile(token!);
       if (res.status === "SUCCESS" && res.data) {
-        setExtractedGpa(res.data.gpa.toString());
+        setExtractedGpa(res.data.gpa ? res.data.gpa.toString() : null);
         setExtractedPassedCount(res.data.total_passed);
+        setStudentMajor(res.data.major || null);
+        setStudentTargetCareer(res.data.target_career || null);
+        setStudentInterests(res.data.interests || null);
+        setEditMajor(res.data.major || "");
+        setEditTargetCareer(res.data.target_career || "");
+        setEditInterests(res.data.interests || "");
       } else {
         setExtractedGpa(null);
         setExtractedPassedCount(null);
+        setStudentMajor(null);
+        setStudentTargetCareer(null);
+        setStudentInterests(null);
+        setEditMajor("");
+        setEditTargetCareer("");
+        setEditInterests("");
       }
     } catch (e) {
       console.error("Không thể tải bảng điểm đã lưu:", e);
+    }
+  }
+
+  async function handleUpdateProfile(major: string, targetCareer: string, interests: string) {
+    if (!token) return;
+    try {
+      const res = await updateStudentProfile(token, major, targetCareer, interests);
+      if (res.status === "SUCCESS") {
+        showToast("Cập nhật hồ sơ cá nhân thành công!", "success");
+        setStudentMajor(major || null);
+        setStudentTargetCareer(targetCareer || null);
+        setStudentInterests(interests || null);
+        setIsProfileExpanded(false);
+      }
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Cập nhật hồ sơ thất bại.", "error");
     }
   }
 
@@ -242,6 +291,7 @@ function App() {
 
   async function handleSelectSession(sessionId: string) {
     setCurrentSessionId(sessionId);
+    setViewMode("chat");
     try {
       const data = await getSessionMessages(sessionId, token!);
       const loadedMessages: ChatMessage[] = data.messages.map((m: any) => ({
@@ -288,6 +338,7 @@ function App() {
 
   function handleNewChat() {
     setCurrentSessionId(null);
+    setViewMode("chat");
     setMessages([
       {
         id: "welcome",
@@ -846,7 +897,7 @@ function App() {
           {isUploadExpanded && (
             <div className="accordion-content">
               <p className="upload-subtitle">
-                Tải lên bảng điểm để AI tự trích xuất GPA và số tín chỉ đạt (chấp nhận .csv, .xlsx, .xls).
+                Tải lên bảng điểm để AI tự trích xuất GPA và số tín chỉ đạt (chấp nhận .csv, .xlsx, .xls, .pdf, .docx, .doc).
               </p>
 
               <label className="file-select-label">
@@ -854,7 +905,7 @@ function App() {
                 <span>{selectedFile ? "Đổi tệp" : "Chọn tệp"}</span>
                 <input
                   type="file"
-                  accept=".csv,.xlsx,.xls"
+                  accept=".csv,.xlsx,.xls,.pdf,.docx,.doc"
                   onChange={handleFileChange}
                   className="file-select-input"
                 />
@@ -914,7 +965,128 @@ function App() {
           )}
         </div>
 
-        <div className="logout-btn-container">
+        {/* Collapsible Profile & Goals Panel */}
+        <div className="sidebar-accordion" style={{ borderTop: "1px solid var(--border-color)", paddingTop: "8px", marginTop: "8px" }}>
+          <button 
+            type="button" 
+            className={`accordion-header ${isProfileExpanded ? "active" : ""}`}
+            onClick={() => setIsProfileExpanded(!isProfileExpanded)}
+            title="Định hướng nghề nghiệp & Chuyên ngành"
+          >
+            <GraduationCap size={16} style={{ flexShrink: 0 }} />
+            <span>Hồ sơ & Định hướng</span>
+            <ChevronDown 
+              size={14} 
+              style={{ 
+                marginLeft: "auto", 
+                transform: isProfileExpanded ? "rotate(180deg)" : "none", 
+                transition: "transform 0.2s" 
+              }} 
+            />
+          </button>
+
+          {!isProfileExpanded && (studentMajor || studentTargetCareer) && (
+            <div className="extracted-summary-row" style={{ marginTop: "4px" }}>
+              {studentMajor && <span className="stat-pill" style={{ fontSize: "0.68rem" }}>{studentMajor}</span>}
+              {studentTargetCareer && <span className="stat-pill" style={{ fontSize: "0.68rem" }} title={studentTargetCareer}>{studentTargetCareer.split(" (")[0]}</span>}
+            </div>
+          )}
+
+          {isProfileExpanded && (
+            <div className="accordion-content" style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "8px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <label style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-muted)", display: "block" }}>Chuyên ngành:</label>
+                <select
+                  value={editMajor}
+                  onChange={(e) => setEditMajor(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "6px 8px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border-color)",
+                    backgroundColor: "var(--bg-card)",
+                    color: "var(--text-main)",
+                    fontSize: "0.72rem",
+                    outline: "none"
+                  }}
+                >
+                  <option value="">-- Chọn chuyên ngành --</option>
+                  <option value="Kỹ thuật phần mềm">Kỹ thuật phần mềm</option>
+                  <option value="Hệ thống thông tin">Hệ thống thông tin</option>
+                  <option value="Công nghệ thông tin">Công nghệ thông tin</option>
+                  <option value="Mạng máy tính và Truyền thông">Mạng máy tính & Truyền thông</option>
+                </select>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <label style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-muted)", display: "block" }}>Định hướng nghề nghiệp:</label>
+                <select
+                  value={editTargetCareer}
+                  onChange={(e) => setEditTargetCareer(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "6px 8px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border-color)",
+                    backgroundColor: "var(--bg-card)",
+                    color: "var(--text-main)",
+                    fontSize: "0.72rem",
+                    outline: "none"
+                  }}
+                >
+                  <option value="">-- Chọn mục tiêu nghề nghiệp --</option>
+                  {careersList.map(career => (
+                    <option key={career} value={career}>{career}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <label style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-muted)", display: "block" }}>Sở thích công nghệ:</label>
+                <input
+                  type="text"
+                  value={editInterests}
+                  onChange={(e) => setEditInterests(e.target.value)}
+                  placeholder="Ví dụ: Kubernetes, Cloud, AI..."
+                  style={{
+                    width: "100%",
+                    padding: "6px 8px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border-color)",
+                    backgroundColor: "var(--bg-card)",
+                    color: "var(--text-main)",
+                    fontSize: "0.72rem",
+                    outline: "none"
+                  }}
+                />
+              </div>
+
+              <button
+                className="upload-btn"
+                type="button"
+                onClick={() => handleUpdateProfile(editMajor, editTargetCareer, editInterests)}
+                style={{ width: "100%", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}
+              >
+                <span>Lưu thông tin</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="logout-btn-container" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <button 
+            className="logout-btn" 
+            type="button" 
+            onClick={() => setViewMode(viewMode === "profile" ? "chat" : "profile")}
+            style={{
+              backgroundColor: viewMode === "profile" ? "var(--primary-light)" : "transparent",
+              color: viewMode === "profile" ? "var(--primary)" : "var(--text-main)",
+              borderColor: viewMode === "profile" ? "var(--primary)" : "transparent"
+            }}
+          >
+            <UserRound size={16} />
+            <span>Hồ sơ & Định hướng</span>
+          </button>
           <button className="logout-btn" type="button" onClick={handleLogout}>
             <LogOut size={16} />
             <span>Đăng xuất</span>
@@ -922,279 +1094,427 @@ function App() {
         </div>
       </aside>
 
-      <section className="chat-panel" aria-label="Hỏi đáp khóa luận">
-        <header className="chat-header">
-          <div className="chat-header-left">
-            {!isSidebarOpen && (
+      {viewMode === "profile" ? (
+        <section className="chat-panel" aria-label="Hồ sơ cá nhân">
+          <header className="chat-header">
+            <div className="chat-header-left">
+              <div className="chat-header-title">
+                <p className="kicker">Thiết lập tài khoản</p>
+                <h1>Hồ sơ cá nhân & Định hướng</h1>
+              </div>
+            </div>
+            <div className="chat-header-right">
               <button 
-                className="sidebar-toggle-btn" 
-                onClick={() => setIsSidebarOpen(true)}
-                title="Mở sidebar"
+                type="button" 
+                onClick={() => setViewMode("chat")}
+                style={{
+                  fontSize: "0.78rem",
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: "var(--primary)",
+                  color: "#fff",
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  cursor: "pointer",
+                  border: "none"
+                }}
               >
-                <Menu size={18} />
+                <span>Quay lại phòng chat</span>
               </button>
-            )}
-            <div className="chat-header-title">
-              <p className="kicker">Hỗ trợ học tập</p>
-              <h1>Tư vấn khóa luận tốt nghiệp</h1>
+            </div>
+          </header>
+
+          <div className="profile-container-scrollable" style={{ padding: "30px", overflowY: "auto", flex: 1, backgroundColor: "var(--bg-app)" }}>
+            <div className="profile-card-layout" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}>
+              
+              {/* Thống kê học vụ */}
+              <div className="stat-cards-wrapper" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+                <div className="stat-card-item" style={{ padding: "20px", borderRadius: "12px", backgroundColor: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Điểm trung bình (GPA)</span>
+                  <div style={{ fontSize: "2rem", fontWeight: 800, color: "var(--primary)", marginTop: "8px" }}>
+                    {extractedGpa || "Chưa có"}
+                  </div>
+                  <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: "6px" }}>Được tự động bóc tách từ file bảng điểm tích lũy của bạn.</p>
+                </div>
+                
+                <div className="stat-card-item" style={{ padding: "20px", borderRadius: "12px", backgroundColor: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Tín chỉ tích lũy</span>
+                  <div style={{ fontSize: "2rem", fontWeight: 800, color: "var(--success)", marginTop: "8px" }}>
+                    {extractedPassedCount || 0} <span style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-muted)" }}>/ 130 tín chỉ</span>
+                  </div>
+                  <div style={{ width: "100%", height: "6px", backgroundColor: "var(--border-color)", borderRadius: "3px", marginTop: "12px", overflow: "hidden" }}>
+                    <div style={{ width: `${Math.min(((extractedPassedCount || 0) / 130) * 100, 100)}%`, height: "100%", backgroundColor: "var(--success)" }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Form chỉnh sửa */}
+              <div className="profile-form-card" style={{ padding: "30px", borderRadius: "12px", backgroundColor: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-md)", display: "flex", flexDirection: "column", gap: "20px" }}>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: 700, borderBottom: "1px solid var(--border-color)", paddingBottom: "10px", color: "var(--text-main)", margin: 0 }}>Định hướng học tập & Nghề nghiệp</h3>
+                
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)" }}>Mã số sinh viên (MSSV):</label>
+                    <input 
+                      type="text" 
+                      value={mssv} 
+                      disabled 
+                      style={{ padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--bg-app)", color: "var(--text-muted)", fontSize: "0.85rem", cursor: "not-allowed", outline: "none" }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)" }}>Email liên hệ:</label>
+                    <input 
+                      type="text" 
+                      value={email || `${mssv}@hcmuaf.edu.vn`} 
+                      disabled 
+                      style={{ padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--bg-app)", color: "var(--text-muted)", fontSize: "0.85rem", cursor: "not-allowed", outline: "none" }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)" }}>Chuyên ngành tuyển sinh:</label>
+                  <select
+                    value={editMajor}
+                    onChange={(e) => setEditMajor(e.target.value)}
+                    style={{ padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.85rem", outline: "none" }}
+                  >
+                    <option value="">-- Chọn chuyên ngành học --</option>
+                    <option value="Kỹ thuật phần mềm">Kỹ thuật phần mềm</option>
+                    <option value="Hệ thống thông tin">Hệ thống thông tin</option>
+                    <option value="Công nghệ thông tin">Công nghệ thông tin</option>
+                    <option value="Mạng máy tính và Truyền thông">Mạng máy tính & Truyền thông</option>
+                  </select>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)" }}>Mục tiêu công việc mong muốn (Lấy động từ CSDL):</label>
+                  <select
+                    value={editTargetCareer}
+                    onChange={(e) => setEditTargetCareer(e.target.value)}
+                    style={{ padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.85rem", outline: "none" }}
+                  >
+                    <option value="">-- Chọn mục tiêu nghề nghiệp --</option>
+                    {careersList.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)" }}>Sở thích công nghệ / Từ khóa cá nhân:</label>
+                  <input
+                    type="text"
+                    value={editInterests}
+                    onChange={(e) => setEditInterests(e.target.value)}
+                    placeholder="Ví dụ: Kubernetes, Cloud Computing, Trí tuệ nhân tạo, ReactJS, CI/CD..."
+                    style={{ padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.85rem", outline: "none" }}
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleUpdateProfile(editMajor, editTargetCareer, editInterests)}
+                  style={{
+                    backgroundColor: "var(--primary)",
+                    color: "#fff",
+                    border: "none",
+                    padding: "12px",
+                    borderRadius: "8px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                    transition: "background-color 0.2s"
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = "var(--primary-hover)"}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = "var(--primary)"}
+                >
+                  Lưu thông tin hồ sơ
+                </button>
+              </div>
+
             </div>
           </div>
-          
-          <div className="chat-header-right">
-            <div className="model-selector">
-              <button 
-                type="button" 
-                className={`selector-btn ${chatMode === "agent" ? "active" : ""}`}
-                onClick={() => setChatMode("agent")}
-                title="Chế độ Multi-Agent"
-              >
-                <Sparkles size={14} />
-                <span>Multi-Agent</span>
-              </button>
-              <button 
-                type="button" 
-                className={`selector-btn ${chatMode === "rag" ? "active" : ""}`}
-                onClick={() => setChatMode("rag")}
-                title="Chế độ Thuần RAG (Baseline)"
-              >
-                <BookOpenCheck size={14} />
-                <span>Thuần RAG</span>
-              </button>
-            </div>
-
-            <div className="live-pill">
-              <span />
-              AI Core Online
+        </section>
+      ) : (
+        <section className="chat-panel" aria-label="Hỏi đáp khóa luận">
+          <header className="chat-header">
+            <div className="chat-header-left">
+              {!isSidebarOpen && (
+                <button 
+                  className="sidebar-toggle-btn" 
+                  onClick={() => setIsSidebarOpen(true)}
+                  title="Mở sidebar"
+                >
+                  <Menu size={18} />
+                </button>
+              )}
+              <div className="chat-header-title">
+                <p className="kicker">Hỗ trợ học tập</p>
+                <h1>Tư vấn khóa luận tốt nghiệp</h1>
+              </div>
             </div>
             
-            <button 
-              className="theme-toggle-btn" 
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={isDarkMode ? "Chuyển sang Giao diện Sáng" : "Chuyển sang Giao diện Tối"}
-            >
-              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </div>
-        </header>
-
-        {isNewChat ? (
-          <div className="new-chat-workspace">
-            <div className="new-chat-center">
-              <h2 className="new-chat-title">Chúng ta nên bắt đầu từ đâu?</h2>
-              <form className="composer centered-composer" onSubmit={handleAsk}>
-                <textarea
-                  ref={inputRef}
-                  value={question}
-                  onChange={(event) => setQuestion(event.target.value)}
-                  placeholder="Hỏi tôi bất kỳ điều gì về khóa luận..."
-                  rows={1}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.shiftKey) {
-                      event.preventDefault();
-                      event.currentTarget.form?.requestSubmit();
-                    }
-                  }}
-                />
+            <div className="chat-header-right">
+              <div className="model-selector">
                 <button 
-                  type="submit" 
-                  className="send-btn"
-                  disabled={!canSubmitQuestion} 
-                  aria-label="Gửi câu hỏi"
+                  type="button" 
+                  className={`selector-btn ${chatMode === "agent" ? "active" : ""}`}
+                  onClick={() => setChatMode("agent")}
+                  title="Chế độ Multi-Agent"
                 >
-                  <Send size={16} />
+                  <Sparkles size={14} />
+                  <span>Multi-Agent</span>
                 </button>
-              </form>
-              <div className="suggestion-prompts">
-                <div 
-                  onClick={() => setQuestion("Điều kiện đăng ký làm khóa luận tốt nghiệp là gì?")} 
-                  className="suggestion-card"
+                <button 
+                  type="button" 
+                  className={`selector-btn ${chatMode === "rag" ? "active" : ""}`}
+                  onClick={() => setChatMode("rag")}
+                  title="Chế độ Thuần RAG (Baseline)"
                 >
-                  <span>Đăng ký khóa luận</span>
-                  <p>Tìm hiểu điều kiện và GPA tối thiểu...</p>
-                </div>
-                <div 
-                  onClick={() => setQuestion("Quy trình thực hiện khóa luận tốt nghiệp gồm những bước nào?")} 
-                  className="suggestion-card"
-                >
-                  <span>Quy trình thực hiện</span>
-                  <p>Các mốc thời gian và hồ sơ cần chuẩn bị...</p>
-                </div>
-                <div 
-                  onClick={() => setQuestion("Làm sao để đồng bộ bảng điểm tích lũy vào hệ thống tư vấn?")} 
-                  className="suggestion-card"
-                >
-                  <span>Đồng bộ bảng điểm</span>
-                  <p>Hướng dẫn tải lên tệp CSV/Excel...</p>
+                  <BookOpenCheck size={14} />
+                  <span>Thuần RAG</span>
+                </button>
+              </div>
+
+              <div className="live-pill">
+                <span />
+                AI Core Online
+              </div>
+              
+              <button 
+                className="theme-toggle-btn" 
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                title={isDarkMode ? "Chuyển sang Giao diện Sáng" : "Chuyển sang Giao diện Tối"}
+              >
+                {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </div>
+          </header>
+
+          {isNewChat ? (
+            <div className="new-chat-workspace">
+              <div className="new-chat-center">
+                <h2 className="new-chat-title">Chúng ta nên bắt đầu từ đâu?</h2>
+                <form className="composer centered-composer" onSubmit={handleAsk}>
+                  <textarea
+                    ref={inputRef}
+                    value={question}
+                    onChange={(event) => setQuestion(event.target.value)}
+                    placeholder="Hỏi tôi bất kỳ điều gì về khóa luận..."
+                    rows={1}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" && !event.shiftKey) {
+                        event.preventDefault();
+                        event.currentTarget.form?.requestSubmit();
+                      }
+                    }}
+                  />
+                  <button 
+                    type="submit" 
+                    className="send-btn"
+                    disabled={!canSubmitQuestion} 
+                    aria-label="Gửi câu hỏi"
+                  >
+                    <Send size={16} />
+                  </button>
+                </form>
+                <div className="suggestion-prompts">
+                  <div 
+                    onClick={() => setQuestion("Điều kiện đăng ký làm khóa luận tốt nghiệp là gì?")} 
+                    className="suggestion-card"
+                  >
+                    <span>Đăng ký khóa luận</span>
+                    <p>Tìm hiểu điều kiện và GPA tối thiểu...</p>
+                  </div>
+                  <div 
+                    onClick={() => setQuestion("Quy trình thực hiện khóa luận tốt nghiệp gồm những bước nào?")} 
+                    className="suggestion-card"
+                  >
+                    <span>Quy trình thực hiện</span>
+                    <p>Các mốc thời gian và hồ sơ cần chuẩn bị...</p>
+                  </div>
+                  <div 
+                    onClick={() => setQuestion("Làm sao để đồng bộ bảng điểm tích lũy vào hệ thống tư vấn?")} 
+                    className="suggestion-card"
+                  >
+                    <span>Đồng bộ bảng điểm</span>
+                    <p>Hướng dẫn tải lên tệp CSV/Excel...</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <>
-            <div className="message-list">
-              {messages.map((message) => (
-                <article key={message.id} className={`message ${message.role}`}>
-                  <div className="message-avatar">
-                    {message.role === "user" ? <UserRound size={16} /> : <Sparkles size={16} />}
-                  </div>
-                  <div className="message-body">
-                    <div className="message-bubble">
-                      {message.isClarify ? (
-                        <div className="clarify-box">
-                          <span className="clarify-icon">⚠️</span>
-                          <strong style={{ fontSize: "0.9rem" }}>{message.content}</strong>
+          ) : (
+            <>
+              <div className="message-list">
+                {messages.map((message) => (
+                  <article key={message.id} className={`message ${message.role}`}>
+                    <div className="message-avatar">
+                      {message.role === "user" ? <UserRound size={16} /> : <Sparkles size={16} />}
+                    </div>
+                    <div className="message-body">
+                      <div className="message-bubble">
+                        {message.isClarify ? (
+                          <div className="clarify-box">
+                            <span className="clarify-icon">⚠️</span>
+                            <strong style={{ fontSize: "0.9rem" }}>{message.content}</strong>
+                          </div>
+                        ) : (
+                          <div>{formatMessageText(message.content)}</div>
+                        )}
+                      </div>
+
+                      {message.sources && message.sources.length > 0 && (
+                        <div className="source-list">
+                          {message.sources.map((source, index) => (
+                            <div className="source-item" key={`${message.id}-${index}`}>
+                              <span>Tài liệu tham khảo {index + 1}</span>
+                              <p>{source}</p>
+                            </div>
+                          ))}
                         </div>
-                      ) : (
-                        <div>{formatMessageText(message.content)}</div>
+                      )}
+
+                      {message.role === "assistant" && message.thinkingSteps && message.thinkingSteps.length > 0 && (
+                        <div className="thinking-container">
+                          <div
+                            className={`thinking-header ${openThinkingMsgs[message.id] ? "open" : ""}`}
+                            onClick={() => toggleThinking(message.id)}
+                          >
+                            <ChevronDown size={12} className="chevron" />
+                            <span>Xem quá trình xử lý Agent</span>
+                          </div>
+                          {openThinkingMsgs[message.id] && (
+                            <div className="thinking-body">
+                              {message.thinkingSteps.map((step) => (
+                                <div key={step.id} className={`thinking-step-item ${step.status}`}>
+                                  <div className="thinking-step-dot" />
+                                  <span>{step.label}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {message.role === "assistant" && message.debugTrace && message.debugTrace.length > 0 && (
+                        <div className="trace-section">
+                          <details className="trace-details">
+                            <summary className="trace-summary">
+                              <span>🛠️ Luồng xử lý Multi-Agent (Dành cho Giám khảo)</span>
+                              <span>Mở rộng ▼</span>
+                            </summary>
+                            <div className="trace-content">
+                              {message.criticScore !== undefined && (
+                                <div className="critic-badge-row">
+                                  <span>Điểm phản biện (Critic Score):</span>
+                                  <span className="score">{message.criticScore}/1.0</span>
+                                </div>
+                              )}
+                              <div className="trace-steps-container">
+                                {message.debugTrace.map((step, sIdx) => (
+                                  <div className="trace-step-card" key={`trace-${message.id}-${sIdx}`}>
+                                    <div className="trace-step-header">
+                                      <span className="trace-step-title">{step.task_id}</span>
+                                      <div className="trace-step-meta">
+                                        <span className={`step-type-badge ${step.task_type.toLowerCase()}`}>
+                                          {step.task_type}
+                                        </span>
+                                        <span className={`step-status-badge ${step.status.toLowerCase()}`}>
+                                          {step.status}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="trace-step-body">
+                                      <div className="trace-step-query">
+                                        Nội dung: <strong>{step.query_intent}</strong>
+                                      </div>
+                                      <pre className="trace-step-data">{step.raw_data}</pre>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </details>
+                        </div>
                       )}
                     </div>
+                  </article>
+                ))}
 
-                    {message.sources && message.sources.length > 0 && (
-                      <div className="source-list">
-                        {message.sources.map((source, index) => (
-                          <div className="source-item" key={`${message.id}-${index}`}>
-                            <span>Tài liệu tham khảo {index + 1}</span>
-                            <p>{source}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {message.role === "assistant" && message.thinkingSteps && message.thinkingSteps.length > 0 && (
-                      <div className="thinking-container">
-                        <div
-                          className={`thinking-header ${openThinkingMsgs[message.id] ? "open" : ""}`}
-                          onClick={() => toggleThinking(message.id)}
-                        >
-                          <ChevronDown size={12} className="chevron" />
-                          <span>Xem quá trình xử lý Agent</span>
+                {isAsking && (
+                  <article className="message assistant">
+                    <div className="message-avatar">
+                      <Sparkles size={16} />
+                    </div>
+                    <div className="message-body">
+                      <div className="message-bubble" style={{ display: "inline-block" }}>
+                        <div className="typing-indicator">
+                          <span />
+                          <span />
+                          <span />
                         </div>
-                        {openThinkingMsgs[message.id] && (
+                      </div>
+                      
+                      {activeThinkingSteps.length > 0 && (
+                        <div className="thinking-container">
+                          <div className="thinking-header open">
+                            <ChevronDown size={12} className="chevron" />
+                            <span>Xem quá trình xử lý Agent</span>
+                          </div>
                           <div className="thinking-body">
-                            {message.thinkingSteps.map((step) => (
+                            {activeThinkingSteps.map((step) => (
                               <div key={step.id} className={`thinking-step-item ${step.status}`}>
                                 <div className="thinking-step-dot" />
                                 <span>{step.label}</span>
                               </div>
                             ))}
                           </div>
-                        )}
-                      </div>
-                    )}
-
-                    {message.role === "assistant" && message.debugTrace && message.debugTrace.length > 0 && (
-                      <div className="trace-section">
-                        <details className="trace-details">
-                          <summary className="trace-summary">
-                            <span>🛠️ Luồng xử lý Multi-Agent (Dành cho Giám khảo)</span>
-                            <span>Mở rộng ▼</span>
-                          </summary>
-                          <div className="trace-content">
-                            {message.criticScore !== undefined && (
-                              <div className="critic-badge-row">
-                                <span>Điểm phản biện (Critic Score):</span>
-                                <span className="score">{message.criticScore}/1.0</span>
-                              </div>
-                            )}
-                            <div className="trace-steps-container">
-                              {message.debugTrace.map((step, sIdx) => (
-                                <div className="trace-step-card" key={`trace-${message.id}-${sIdx}`}>
-                                  <div className="trace-step-header">
-                                    <span className="trace-step-title">{step.task_id}</span>
-                                    <div className="trace-step-meta">
-                                      <span className={`step-type-badge ${step.task_type.toLowerCase()}`}>
-                                        {step.task_type}
-                                      </span>
-                                      <span className={`step-status-badge ${step.status.toLowerCase()}`}>
-                                        {step.status}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="trace-step-body">
-                                    <div className="trace-step-query">
-                                      Nội dung: <strong>{step.query_intent}</strong>
-                                    </div>
-                                    <pre className="trace-step-data">{step.raw_data}</pre>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </details>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-
-              {isAsking && (
-                <article className="message assistant">
-                  <div className="message-avatar">
-                    <Sparkles size={16} />
-                  </div>
-                  <div className="message-body">
-                    <div className="message-bubble" style={{ display: "inline-block" }}>
-                      <div className="typing-indicator">
-                        <span />
-                        <span />
-                        <span />
-                      </div>
+                        </div>
+                      )}
                     </div>
-                    
-                    {activeThinkingSteps.length > 0 && (
-                      <div className="thinking-container">
-                        <div className="thinking-header open">
-                          <ChevronDown size={12} className="chevron" />
-                          <span>Xem quá trình xử lý Agent</span>
-                        </div>
-                        <div className="thinking-body">
-                          {activeThinkingSteps.map((step) => (
-                            <div key={step.id} className={`thinking-step-item ${step.status}`}>
-                              <div className="thinking-step-dot" />
-                              <span>{step.label}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              )}
-              
-              <div ref={messagesEndRef} />
-            </div>
-
-            <div className="composer-container">
-              <form className="composer" onSubmit={handleAsk}>
-                <textarea
-                  ref={inputRef}
-                  value={question}
-                  onChange={(event) => setQuestion(event.target.value)}
-                  placeholder="Nhập câu hỏi của bạn về khóa luận, quy chế học tập..."
-                  rows={1}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.shiftKey) {
-                      event.preventDefault();
-                      event.currentTarget.form?.requestSubmit();
-                    }
-                  }}
-                />
-                <button 
-                  type="submit" 
-                  className="send-btn"
-                  disabled={!canSubmitQuestion} 
-                  aria-label="Gửi câu hỏi"
-                >
-                  <Send size={16} />
-                </button>
-              </form>
-              <div style={{ textAlign: "center", fontSize: "0.72rem", color: "var(--text-muted)", marginTop: "4px" }}>
-                Hệ thống RAG và Graph RAG có thể cung cấp thông tin sai lệch. Hãy kiểm chứng lại nếu cần.
+                  </article>
+                )}
+                
+                <div ref={messagesEndRef} />
               </div>
-            </div>
-          </>
-        )}
-      </section>
+
+              <div className="composer-container">
+                <form className="composer" onSubmit={handleAsk}>
+                  <textarea
+                    ref={inputRef}
+                    value={question}
+                    onChange={(event) => setQuestion(event.target.value)}
+                    placeholder="Nhập câu hỏi của bạn về khóa luận, quy chế học tập..."
+                    rows={1}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" && !event.shiftKey) {
+                        event.preventDefault();
+                        event.currentTarget.form?.requestSubmit();
+                      }
+                    }}
+                  />
+                  <button 
+                    type="submit" 
+                    className="send-btn"
+                    disabled={!canSubmitQuestion} 
+                    aria-label="Gửi câu hỏi"
+                  >
+                    <Send size={16} />
+                  </button>
+                </form>
+                <div style={{ textAlign: "center", fontSize: "0.72rem", color: "var(--text-muted)", marginTop: "4px" }}>
+                  Hệ thống RAG và Graph RAG có thể cung cấp thông tin sai lệch. Hãy kiểm chứng lại nếu cần.
+                </div>
+              </div>
+            </>
+          )}
+        </section>
+      )}
     </main>
   );
 }

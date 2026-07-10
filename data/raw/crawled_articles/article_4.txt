@@ -1,0 +1,7 @@
+Source: https://devblogs.microsoft.com/python/feed/
+Title: Introducing Apache Arrow Support in mssql-python
+Link: https://devblogs.microsoft.com/python/introducing-apache-arrow-support-in-mssql-python/
+Date: Mon, 04 May 2026 04:33:00 +0000
+Content:
+Reviewed by Sumit Sarabhai Fetching a million rows from SQL Server into a Polars DataFrame used to mean a million Python objects, a million GC allocations, and then throwing it all away to build a DataFrame. Not anymore. mssql-python now supports fetching SQL Server data directly as Apache Arrow structures &#8211; a faster and more [&#8230;]
+The post Introducing Apache Arrow Support in mssql-python appeared first on Microsoft for Python Developers Blog.

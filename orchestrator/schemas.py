@@ -19,7 +19,7 @@ class TaskParameters(BaseModel):
 
 class Task(BaseModel):
     task_id: str = Field(description="Unique task id, for example TASK_01")
-    task_type: Literal["RAG", "GRAG", "CLARIFY"] = Field(description="Worker type")
+    task_type: Literal["RAG", "GRAG", "CLARIFY", "CAREER_ADVISE"] = Field(description="Worker type")
     query_intent: str = Field(
         description="Standalone rewritten sub-question for retrieval and synthesis"
     )

@@ -54,7 +54,8 @@ class Neo4jSeeder:
             c.year = row.year,
             c.semester = row.semester,
             c.is_core_A = row.is_core_A,
-            c.is_conditional_star = row.is_conditional_star
+            c.is_conditional_star = row.is_conditional_star,
+            c.description = row.description
         MERGE (g:CourseGroup {name: row.group_name})
         MERGE (c)-[:BELONGS_TO]->(g)
         """
@@ -68,7 +69,8 @@ class Neo4jSeeder:
             "semester": s["curriculum_position"]["semester"],
             "is_core_A": s["classification"]["is_core_A"],
             "is_conditional_star": s["classification"]["is_conditional_star"],
-            "group_name": s["classification"]["group_name"]
+            "group_name": s["classification"]["group_name"],
+            "description": s.get("description", "")
         } for s in subjects]
         self.query(node_cypher, {"rows": rows})
 

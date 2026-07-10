@@ -35,21 +35,26 @@ class OrchestratorPlanner:
         - Chỉ sinh ra TỐI ĐA 5 tác vụ (tasks) cho mỗi câu hỏi. Tuyệt đối không sinh nhiều hơn để tránh nghẽn I/O hệ thống.
 
         Quy tắc phân loại nhiệm vụ (Task Type):
-         1. Chọn "GRAG" (Graph RAG) NẾU câu hỏi ĐÒI HỎI SUY LUẬN LOGIC, RÀNG BUỘC MÔN HỌC HOẶC THÔNG TIN VỀ 1 MÔN CỤ THỂ:
+         1. Chọn "CAREER_ADVISE" (Tư vấn nghề nghiệp) NẾU câu hỏi liên quan đến:
+         - Định hướng công việc hoặc vị trí tuyển dụng (ví dụ: DevOps, Software Engineer, Data Scientist, Cloud, An toàn thông tin...).
+         - Đề xuất lộ trình môn học định hướng công việc cụ thể.
+         - Hỏi về kỹ năng cần có, xu hướng công nghệ toàn cầu hoặc chứng chỉ quốc tế liên quan.
+
+         2. Chọn "GRAG" (Graph RAG) NẾU câu hỏi ĐÒI HỎI SUY LUẬN LOGIC, RÀNG BUỘC MÔN HỌC HOẶC THÔNG TIN VỀ 1 MÔN CỤ THỂ (không bàn về định hướng nghề nghiệp):
          - BẤT KỲ câu hỏi nào về "Khóa luận tốt nghiệp", "Đồ án", "Thực tập" hoặc 1 môn học có tên cụ thể (Hỏi về số tín chỉ, điều kiện, mã môn).
-         - Gợi ý lộ trình, hỏi "nên học môn gì tiếp theo", tư vấn dựa trên danh sách môn đã học.
+         - Gợi ý lộ trình, hỏi "nên học môn gì tiếp theo", tư vấn dựa trên danh sách môn đã học nói chung.
          - Tên môn học, mã môn học (VD: Cơ sở dữ liệu, CTDL, Toán cao cấp...).
          - Điều kiện tiên quyết, học trước, học song hành.
          - Đăng ký môn học, xung đột lịch học.
          - Tính toán tổng tín chỉ đã tích lũy, GPA (dựa trên bảng điểm).
 
-        2. Chọn "RAG" (Vector RAG) NẾU câu hỏi CHỈ TRA CỨU QUY CHẾ/VĂN BẢN (Không dính tới môn học cụ thể):
-           - Các quy chế chung (VD: Bao nhiêu điểm thì bị đuổi học? Điều kiện xét học bổng? Quy định bảo lưu?).
-           - Lịch biểu chung, thủ tục hành chính giấy tờ.
+         3. Chọn "RAG" (Vector RAG) NẾU câu hỏi CHỈ TRA CỨU QUY CHẾ/VĂN BẢN (Không dính tới môn học cụ thể hay nghề nghiệp):
+            - Các quy chế chung (VD: Bao nhiêu điểm thì bị đuổi học? Điều kiện xét học bổng? Quy định bảo lưu?).
+            - Lịch biểu chung, thủ tục hành chính giấy tờ.
 
-        3. Chọn "CLARIFY" (Hỏi lại) NẾU CÂU HỎI QUÁ MƠ HỒ HOẶC THIẾU NGỮ CẢNH TRẦM TRỌNG:
-           - Ví dụ SV hỏi: "Em đăng ký môn đó được không?" (Không rõ 'môn đó' là môn nào).
-           - Hành động: Chọn task_type="CLARIFY", ghi câu hỏi cần làm rõ vào trường 'clarification_message', và set 'needs_clarification'=True.
+         4. Chọn "CLARIFY" (Hỏi lại) NẾU CÂU HỎI QUÁ MƠ HỒ HOẶC THIẾU NGỮ CẢNH TRẦM TRỌNG:
+            - Ví dụ SV hỏi: "Em đăng ký môn đó được không?" (Không rõ 'môn đó' là môn nào).
+            - Hành động: Chọn task_type="CLARIFY", ghi câu hỏi cần làm rõ vào trường 'clarification_message', và set 'needs_clarification'=True.
 
          QUY TẮC ĐÁNH GIÁ (Metadata Logging):
         - reasoning_summary: Viết 1-2 câu giải thích tại sao bạn lại chọn các Agent này.

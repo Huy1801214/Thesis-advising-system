@@ -55,7 +55,10 @@ async def handle_chat(question: str, mode: str = "agent", mssv: str = Depends(ge
                 "cumulative_gpa": profile.cumulative_gpa,
                 "total_earned_credits": profile.total_earned_credits,
                 "passed_courses": profile.passed_courses,
-                "current_courses": profile.current_courses
+                "current_courses": profile.current_courses,
+                "major": profile.major,
+                "target_career": profile.target_career,
+                "interests": profile.interests
             }
         
         # 2. Định tuyết Task Plan cho Executor thực thi
@@ -210,7 +213,10 @@ async def handle_chat_stream(request: Request, question: str, session_id: str = 
                     "cumulative_gpa": profile.cumulative_gpa,
                     "total_earned_credits": profile.total_earned_credits,
                     "passed_courses": profile.passed_courses,
-                    "current_courses": profile.current_courses
+                    "current_courses": profile.current_courses,
+                    "major": profile.major,
+                    "target_career": profile.target_career,
+                    "interests": profile.interests
                 }
             MAX_TASKS = 5
             safe_tasks = plan.tasks[:MAX_TASKS]

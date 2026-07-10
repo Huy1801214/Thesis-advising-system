@@ -1,0 +1,7 @@
+Source: https://github.blog/feed/
+Title: How GitHub used secret scanning to reach inbox zero
+Link: https://github.blog/security/application-security/how-github-used-secret-scanning-to-reach-inbox-zero/
+Date: Thu, 02 Jul 2026 16:00:00 +0000
+Content:
+GitHub had 20,000+ secret scanning alerts across 15,000 repositories. Here's how we separated signal from noise, built remediation workflows, and reached inbox zero in nine months.
+The post How GitHub used secret scanning to reach inbox zero appeared first on The GitHub Blog.

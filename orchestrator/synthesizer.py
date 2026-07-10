@@ -12,7 +12,30 @@ class FinalSynthesizer:
         self.llm = build_chat_model(temperature=0)
 
     async def synthesize(self, original_question: str, trace: List[Dict[str, Any]]) -> str:
-        prompt = f"""
+        # Kiểm tra xem có tác vụ tư vấn nghề nghiệp trong trace không
+        is_career_advise = any(t.get("task_type") == "CAREER_ADVISE" for t in trace)
+        
+        if is_career_advise:
+            prompt = f"""
+Bạn là bộ tổng hợp câu trả lời hướng nghiệp cho hệ thống tư vấn học vụ.
+
+Nhiệm vụ:
+- Đây là kết quả tư vấn hướng nghiệp học tập (CAREER_ADVISE).
+- Hãy giữ nguyên cấu trúc 3 phần từ kết quả của agent CAREER_ADVISE cung cấp:
+  1. **📌 ĐÁNH GIÁ NĂNG LỰC HIỆN TẠI**
+  2. **📚 LỘ TRÌNH MÔN HỌC ĐỀ XUẤT**
+  3. **🌐 XU HƯỚNG THỊ TRƯỜNG & CHỨNG CHỈ QUỐC TẾ**
+- Bạn chỉ cần thêm một câu chào hỏi thân thiện ở đầu và lời chúc học tập thành công ở cuối một cách tự nhiên.
+- Tuyệt đối không tự ý bịa thêm môn học hay chứng chỉ hãng ngoài những gì kết quả của agent cung cấp.
+
+Câu hỏi gốc của sinh viên:
+{original_question}
+
+Kết quả của Agent CAREER_ADVISE:
+{json.dumps(trace, ensure_ascii=False, indent=2)}
+"""
+        else:
+            prompt = f"""
 Bạn là bộ tổng hợp câu trả lời cuối cùng cho hệ thống tư vấn học vụ.
 
 Nhiệm vụ:

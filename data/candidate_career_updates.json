@@ -1,0 +1,58 @@
+{
+  "careers": [
+    {
+      "name": "Kỹ sư Điện toán đám mây (Cloud Engineer)",
+      "description": "Kỹ sư Điện toán đám mây chịu trách nhiệm thiết kế, triển khai và quản lý các giải pháp điện toán đám mây cho tổ chức.",
+      "market_demand": "High",
+      "market_outlook": "Xu hướng sử dụng điện toán đám mây đang gia tăng mạnh mẽ, đặc biệt là trong bối cảnh chuyển đổi số.",
+      "competencies": [
+        {
+          "name": "Quản trị AWS",
+          "description": "Kiến thức về quản lý và tối ưu hóa các dịch vụ AWS."
+        },
+        {
+          "name": "Kubernetes",
+          "description": "Kỹ năng triển khai và quản lý các cụm Kubernetes."
+        },
+        {
+          "name": "DevOps",
+          "description": "Kỹ năng tích hợp và triển khai liên tục (CI/CD) trong môi trường đám mây."
+        }
+      ],
+      "market_articles": [
+        {
+          "title": "Accelerate your infrastructure deployments by up to 4x with AWS CloudFormation Express mode",
+          "content": "AWS CloudFormation Express mode giúp tăng tốc độ triển khai hạ tầng lên đến 4 lần, cho phép các nhà phát triển nhận xác nhận triển khai trong vài giây.",
+          "source": "AWS Blog"
+        }
+      ]
+    },
+    {
+      "name": "Kỹ sư An toàn thông tin (Security Engineer)",
+      "description": "Kỹ sư An toàn thông tin đảm bảo an ninh cho hệ thống và dữ liệu của tổ chức.",
+      "market_demand": "High",
+      "market_outlook": "Nhu cầu về an toàn thông tin ngày càng tăng do sự gia tăng các mối đe dọa mạng.",
+      "competencies": [
+        {
+          "name": "Quản lý bảo mật",
+          "description": "Kỹ năng thiết lập và duy trì các chính sách bảo mật."
+        },
+        {
+          "name": "Phân tích rủi ro",
+          "description": "Khả năng đánh giá và phân tích các rủi ro bảo mật."
+        },
+        {
+          "name": "Kiểm tra xâm nhập",
+          "description": "Kỹ năng thực hiện các bài kiểm tra xâm nhập để phát hiện lỗ hổng."
+        }
+      ],
+      "market_articles": [
+        {
+          "title": "6 security settings every GitHub maintainer should enable this week",
+          "content": "Bài viết đề xuất 6 cài đặt bảo mật mà mọi người duy trì GitHub nên kích hoạt để bảo vệ dự án của họ.",
+          "source": "GitHub Blog"
+        }
+      ]
+    }
+  ]
+}

@@ -13,5 +13,8 @@ class StudentProfile(Base):
     total_earned_credits = Column(Float, nullable=True)
     passed_courses = Column(JSONB, default=[]) 
     current_courses = Column(JSONB, default=[])
+    major = Column(String, nullable=True)
+    target_career = Column(String, nullable=True)
+    interests = Column(String, nullable=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     user = relationship("User", back_populates="profile")

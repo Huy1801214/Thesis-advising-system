@@ -1,0 +1,7 @@
+Source: https://github.blog/feed/
+Title: 6 security settings every GitHub maintainer should enable this week
+Link: https://github.blog/security/6-security-settings-every-github-maintainer-should-enable-this-week/
+Date: Wed, 01 Jul 2026 15:59:29 +0000
+Content:
+These six free settings will not make your project unhackable. Nothing will. What they will do is close the easy doors. Turn these on, and your project will be meaningfully harder to attack than it was before.
+The post 6 security settings every GitHub maintainer should enable this week appeared first on The GitHub Blog.

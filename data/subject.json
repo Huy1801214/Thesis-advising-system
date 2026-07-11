@@ -24,7 +24,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức cơ bản về triết học Mác-Lênin, giúp sinh viên hiểu rõ các nguyên lý, phương pháp luận và ứng dụng trong thực tiễn xã hội."
   },
   {
     "course_code": "202108",
@@ -51,7 +52,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị kiến thức về các khái niệm và phương pháp giải toán cao cấp, bao gồm đại số tuyến tính và giải tích, phục vụ cho các môn học chuyên ngành."
   },
   {
     "course_code": "202109",
@@ -78,7 +80,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học tiếp tục phát triển kiến thức toán học với các chủ đề như chuỗi số, hàm số và tích phân, giúp sinh viên nâng cao khả năng tư duy logic và giải quyết vấn đề."
   },
   {
     "course_code": "202206",
@@ -105,7 +108,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về các nguyên lý cơ bản của vật lý, bao gồm điện từ học và quang học, giúp sinh viên áp dụng vào các lĩnh vực công nghệ thông tin."
   },
   {
     "course_code": "202501",
@@ -132,7 +136,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giúp sinh viên rèn luyện thể lực và kỹ năng sống, nâng cao sức khỏe và tinh thần, tạo nền tảng cho việc học tập và làm việc hiệu quả."
   },
   {
     "course_code": "213603",
@@ -159,7 +164,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị kỹ năng giao tiếp tiếng Anh cơ bản, giúp sinh viên tự tin trong việc sử dụng ngôn ngữ trong môi trường học tập và làm việc quốc tế."
   },
   {
     "course_code": "214202",
@@ -186,7 +192,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giới thiệu các khái niệm cơ bản về công nghệ thông tin, bao gồm phần cứng, phần mềm và mạng máy tính, tạo nền tảng cho các môn học chuyên sâu sau này."
   },
   {
     "course_code": "200102",
@@ -210,10 +217,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["200101"],
+      "previous_courses": [
+        "200101"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về kinh tế chính trị Mác-Lênin, giúp sinh viên hiểu rõ các quy luật kinh tế và ứng dụng vào thực tiễn phát triển kinh tế xã hội."
   },
   {
     "course_code": "200201",
@@ -240,7 +250,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị kiến thức lý thuyết về quân sự, bao gồm các nguyên tắc, chiến lược và kỹ thuật quân sự cơ bản, phục vụ cho việc rèn luyện tư duy chiến lược."
   },
   {
     "course_code": "200202",
@@ -267,7 +278,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học thực hành quân sự giúp sinh viên rèn luyện kỹ năng thực tế, bao gồm thao tác quân sự, kỹ năng sinh tồn và làm việc nhóm trong môi trường áp lực."
   },
   {
     "course_code": "202110",
@@ -294,7 +306,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị kiến thức về các khái niệm toán học nâng cao, bao gồm giải tích, đại số tuyến tính và ứng dụng trong các bài toán thực tiễn trong lĩnh vực công nghệ thông tin."
   },
   {
     "course_code": "202502",
@@ -321,7 +334,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giúp sinh viên rèn luyện thể lực, nâng cao sức khỏe và phát triển kỹ năng thể thao, góp phần vào việc duy trì lối sống lành mạnh."
   },
   {
     "course_code": "213604",
@@ -348,7 +362,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học nâng cao kỹ năng tiếng Anh giao tiếp, đọc hiểu và viết, phục vụ cho việc học tập và làm việc trong môi trường quốc tế."
   },
   {
     "course_code": "200103",
@@ -372,10 +387,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["200102"],
+      "previous_courses": [
+        "200102"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về lý thuyết và thực tiễn của chủ nghĩa xã hội, giúp sinh viên hiểu rõ hơn về các nguyên lý và giá trị của hệ thống xã hội này."
   },
   {
     "course_code": "202121",
@@ -399,10 +417,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["202110"],
+      "previous_courses": [
+        "202110"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giới thiệu các khái niệm cơ bản về xác suất và thống kê, giúp sinh viên phân tích dữ liệu và đưa ra quyết định dựa trên số liệu."
   },
   {
     "course_code": "202622",
@@ -429,7 +450,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về hệ thống pháp luật Việt Nam, các nguyên tắc cơ bản và ứng dụng trong thực tiễn, giúp sinh viên hiểu rõ quyền và nghĩa vụ của công dân."
   },
   {
     "course_code": "214389",
@@ -456,7 +478,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị kiến thức về lý thuyết và ứng dụng của toán rời rạc, bao gồm lý thuyết đồ thị, tổ hợp và logic, phục vụ cho việc phát triển phần mềm."
   },
   {
     "course_code": "200107",
@@ -480,10 +503,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["200103"],
+      "previous_courses": [
+        "200103"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giúp sinh viên hiểu rõ tư tưởng Hồ Chí Minh, các nguyên lý và giá trị cốt lõi, từ đó áp dụng vào thực tiễn công việc và cuộc sống."
   },
   {
     "course_code": "200105",
@@ -507,10 +533,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["200107"],
+      "previous_courses": [
+        "200107"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về lịch sử hình thành và phát triển của Đảng Cộng sản Việt Nam, giúp sinh viên hiểu rõ vai trò của Đảng trong sự nghiệp cách mạng."
   },
   {
     "course_code": "202620",
@@ -537,7 +566,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học phát triển kỹ năng giao tiếp hiệu quả, bao gồm kỹ năng thuyết trình, lắng nghe và tương tác, cần thiết cho môi trường làm việc và học tập."
   },
   {
     "course_code": "208453",
@@ -564,7 +594,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức cơ bản về marketing, bao gồm các khái niệm, chiến lược và công cụ marketing. Sinh viên sẽ phát triển kỹ năng phân tích thị trường và xây dựng kế hoạch marketing hiệu quả."
   },
   {
     "course_code": "214321",
@@ -591,7 +622,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Lập trình cơ bản' cung cấp kiến thức về lập trình hướng đối tượng với ngôn ngữ Java, bao gồm các phương pháp phân tích bài toán và kiểm thử chức năng bằng Junit Test. Sinh viên sẽ thực hành qua các bài tập sử dụng công cụ Borland Builder/Eclipse."
   },
   {
     "course_code": "214231",
@@ -618,7 +650,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Cấu trúc máy tính' cung cấp kiến thức về kiến trúc máy tính, các thành phần như CPU, Memory, hệ thống Bus, và I/O. Sinh viên sẽ học cách nhận diện các thành phần máy tính và nguyên lý điều khiển thiết bị thông qua lý thuyết và thực hành."
   },
   {
     "course_code": "214294",
@@ -642,10 +675,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214202"],
+      "previous_courses": [
+        "214202"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Nhập môn Hệ điều hành' cung cấp kiến thức về môi trường Unix-Linux, giúp sinh viên làm quen với các thao tác quản lý tập tin, thư mục, người dùng và cài đặt phần mềm. Sinh viên thực hành trên hệ điều hành Redhat Linux qua công cụ đồ họa và dòng lệnh."
   },
   {
     "course_code": "214331",
@@ -669,10 +705,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214321"],
+      "previous_courses": [
+        "214321"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Lập trình nâng cao cung cấp kiến thức về ngôn ngữ lập trình Java, tập trung vào lập trình hướng đối tượng, khai báo lớp, phương thức, và xử lý ngoại lệ. Sinh viên sẽ thực hành lập trình giao diện đồ họa sử dụng Swing để phát triển ứng dụng desktop."
   },
   {
     "course_code": "214362",
@@ -696,10 +735,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331"],
+      "previous_courses": [
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học về giao tiếp người-máy, nghiên cứu các phương pháp thiết kế giao diện người dùng và trải nghiệm người dùng. Sinh viên sẽ thực hành thiết kế và đánh giá giao diện."
   },
   {
     "course_code": "214441",
@@ -723,10 +765,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331"],
+      "previous_courses": [
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Cấu Trúc Dữ Liệu trang bị cho sinh viên kiến thức về kỹ thuật lập trình với mảng, xâu liên kết, bảng băm, cây nhị phân, và các thuật toán sắp xếp, tìm kiếm. Sinh viên sẽ thực hành thông qua các bài tập lập trình và thảo luận nhóm."
   },
   {
     "course_code": "214241",
@@ -753,7 +798,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Mạng Máy Tính Cơ Bản trang bị kiến thức về hệ thống mạng máy tính, thiết kế và quản trị mạng LAN, cấu hình thiết bị mạng như SWITCH và ROUTER, cùng với các công cụ thực hành như DNS, DHCP, và các chuẩn mạng LAN."
   },
   {
     "course_code": "214352",
@@ -777,10 +823,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214331"],
+      "previous_courses": [
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Thiết kế hướng đối tượng' trang bị cho sinh viên các khái niệm cơ bản về OOP, nguyên lý thiết kế và các mẫu thiết kế phần mềm. Sinh viên sẽ thực hành áp dụng các mẫu thiết kế vào bài toán cụ thể thông qua các bài tập thực hành và ví dụ thực tế."
   },
   {
     "course_code": "214354",
@@ -804,10 +853,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214331"],
+      "previous_courses": [
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Lý thuyết Đồ thị cung cấp kiến thức cơ bản về lý thuyết đồ thị, ứng dụng trong trí tuệ nhân tạo và xử lý tín hiệu. Sinh viên sẽ thực hành lập trình bằng ngôn ngữ Java trên công cụ Eclipse thông qua các bài tập thực hành và dự án nhóm."
   },
   {
     "course_code": "214442",
@@ -834,7 +886,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức cơ bản về cơ sở dữ liệu, bao gồm mô hình dữ liệu, ngôn ngữ SQL, thiết kế cơ sở dữ liệu và quản lý dữ liệu, giúp sinh viên xây dựng và quản lý hệ thống cơ sở dữ liệu hiệu quả."
   },
   {
     "course_code": "214990",
@@ -858,10 +911,14 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["202121", "214441"],
+      "previous_courses": [
+        "202121",
+        "214441"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học trang bị cho sinh viên các phương pháp nghiên cứu khoa học, bao gồm thiết kế nghiên cứu, thu thập và phân tích dữ liệu, giúp sinh viên phát triển kỹ năng nghiên cứu và viết báo cáo khoa học."
   },
   {
     "course_code": "214252",
@@ -885,10 +942,15 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331", "214241", "214442"],
+      "previous_courses": [
+        "214331",
+        "214241",
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Lập trình mạng cơ bản trang bị cho sinh viên kiến thức về I/O, thao tác với file, định dạng dữ liệu và giao thức truyền dữ liệu như HTTP, POP3, SMTP. Sinh viên thực hành lập trình ứng dụng mạng Client/Server sử dụng Socket và RMI."
   },
   {
     "course_code": "214390",
@@ -912,10 +974,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331"],
+      "previous_courses": [
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về lập trình Python, bao gồm cú pháp, cấu trúc dữ liệu, và lập trình hướng đối tượng, giúp sinh viên phát triển kỹ năng lập trình và giải quyết vấn đề."
   },
   {
     "course_code": "214462",
@@ -939,10 +1004,14 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331", "214241"],
+      "previous_courses": [
+        "214331",
+        "214241"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học dạy về lập trình web, bao gồm HTML, CSS, JavaScript và các công nghệ web hiện đại, giúp sinh viên xây dựng và phát triển ứng dụng web tương tác."
   },
   {
     "course_code": "214463",
@@ -966,10 +1035,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214441"],
+      "previous_courses": [
+        "214441"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Trí tuệ Nhân tạo cung cấp kiến thức về các phương pháp và ứng dụng của trí tuệ nhân tạo, bao gồm các thuật toán học máy, xử lý ảnh và web ngữ nghĩa. Sinh viên thực hành lập trình bằng ngôn ngữ Java trên công cụ Eclipse thông qua các bài tập và dự án."
   },
   {
     "course_code": "214274",
@@ -993,10 +1065,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214252"],
+      "previous_courses": [
+        "214252"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về lập trình trên thiết bị di động, bao gồm phát triển ứng dụng cho Android và iOS, giúp sinh viên nắm vững quy trình phát triển ứng dụng di động."
   },
   {
     "course_code": "214370",
@@ -1020,10 +1095,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214352"],
+      "previous_courses": [
+        "214352"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học \"Nhập môn công nghệ phần mềm\" cung cấp kiến thức về lịch sử phát triển ngành công nghệ phần mềm, quy trình phát triển phần mềm, vai trò của các thành viên trong nhóm phát triển, và kỹ năng viết tài liệu kỹ thuật. Sinh viên sẽ thực hành thuyết trình và làm việc nhóm."
   },
   {
     "course_code": "214461",
@@ -1047,10 +1125,14 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214352", "214442"],
+      "previous_courses": [
+        "214352",
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học \"Phân tích và thiết kế hệ thống thông tin\" trang bị cho sinh viên kiến thức về quy trình phát triển phần mềm, kỹ thuật hướng đối tượng, ngôn ngữ UML và các kỹ thuật thu thập yêu cầu. Sinh viên thực hành xây dựng hệ thống hướng đối tượng theo phương pháp Unified Process."
   },
   {
     "course_code": "214492",
@@ -1074,10 +1156,15 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214463", "214390", "202121"],
+      "previous_courses": [
+        "214463",
+        "214390",
+        "202121"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về máy học, bao gồm các thuật toán học máy, ứng dụng và đánh giá mô hình, giúp sinh viên phát triển kỹ năng xây dựng và áp dụng mô hình máy học."
   },
   {
     "course_code": "214282",
@@ -1102,10 +1189,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214241"],
+      "previous_courses": [
+        "214241"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Mạng máy tính nâng cao trang bị cho sinh viên kiến thức về thiết kế, bảo trì và xử lý sự cố mạng LAN, cấu hình router và switch Cisco, quản lý Cisco IOS, thiết lập các giao thức định tuyến, xây dựng Firewall qua ACLs và mạng ảo VLAN."
   },
   {
     "course_code": "214372",
@@ -1130,10 +1220,15 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214331", "214241", "214442"],
+      "previous_courses": [
+        "214331",
+        "214241",
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Lập trình .Net trang bị cho sinh viên kiến thức về framework .Net và ngôn ngữ C#, tập trung vào lập trình hướng đối tượng, kiểu dữ liệu, kế thừa, và tính đa hình. Sinh viên thực hành qua các ví dụ cụ thể và so sánh với ngôn ngữ Java."
   },
   {
     "course_code": "214386",
@@ -1158,11 +1253,16 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214241", "214331"],
+      "previous_courses": [
+        "214241",
+        "214331"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
-  },{
+    },
+    "description": "Môn học giới thiệu về lập trình PHP, phát triển ứng dụng web động, kết nối cơ sở dữ liệu và sử dụng các framework PHP, giúp sinh viên nắm vững kỹ năng lập trình web."
+  },
+  {
     "course_code": "214271",
     "course_name": "Quản trị mạng",
     "credits": {
@@ -1185,10 +1285,14 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214242", "214241"],
+      "previous_courses": [
+        "214242",
+        "214241"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Quản trị mạng trang bị kiến thức về quản trị hệ thống mạng, bao gồm cấu hình và cài đặt các dịch vụ máy chủ như web server, mail server, FTP server, DNS server và DHCP server trên Hệ Điều Hành Windows và Linux. Học viên sẽ thực hành qua các bài tập và dự án thực tế."
   },
   {
     "course_code": "214353",
@@ -1213,10 +1317,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214441"],
+      "previous_courses": [
+        "214441"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học Đồ họa Máy tính trang bị cho sinh viên kiến thức về các thuật toán vẽ hình cơ bản 2D và 3D, hệ trục tọa độ, phép chiếu, cùng với việc sử dụng thư viện đồ họa OpenGL để phát triển ứng dụng và kỹ thuật làm phim hoạt hình."
   },
   {
     "course_code": "214451",
@@ -1241,10 +1348,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214442"],
+      "previous_courses": [
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Hệ quản trị cơ sở dữ liệu' trang bị cho sinh viên kiến thức về kiến trúc hệ CSDL, quản lý truy xuất đồng thời, an toàn dữ liệu và khôi phục dữ liệu. Sinh viên thực hành trên hệ quản trị CSDL MS SQL Server để phát triển kỹ năng quản lý và khai thác dữ liệu."
   },
   {
     "course_code": "214464",
@@ -1269,10 +1379,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214462"],
+      "previous_courses": [
+        "214462"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học \"An toàn và bảo mật hệ thống\" cung cấp kiến thức về hệ thống mật mã đối xứng, bất đối xứng, hàm băm, chữ ký điện tử và chứng nhận khóa công cộng. Sinh viên thực hành lập trình Java và sử dụng các thư viện JCA/JCE, JCE Taglib để áp dụng các phương pháp bảo vệ dữ liệu trong ứng dụng web."
   },
   {
     "course_code": "214465",
@@ -1297,10 +1410,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214442"],
+      "previous_courses": [
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Hệ thống thông tin địa lý' cung cấp kiến thức cơ bản về bản đồ học, hệ thống GIS, và mô hình số địa hình. Sinh viên sẽ học cách triển khai, cài đặt và phát triển hệ thống GIS, sử dụng các công cụ phần mềm liên quan để ứng dụng trong các lĩnh vực kinh tế xã hội."
   },
   {
     "course_code": "214493",
@@ -1325,10 +1441,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214462"],
+      "previous_courses": [
+        "214462"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học thực tập lập trình web giúp sinh viên áp dụng kiến thức đã học vào thực tế, phát triển dự án web từ thiết kế đến triển khai, nâng cao kỹ năng lập trình và làm việc nhóm."
   },
   {
     "course_code": "214273",
@@ -1353,10 +1472,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214252"],
+      "previous_courses": [
+        "214252"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức nâng cao về lập trình mạng, bao gồm giao thức mạng, lập trình socket và phát triển ứng dụng mạng, giúp sinh viên nắm vững kỹ năng lập trình ứng dụng mạng hiệu quả."
   },
   {
     "course_code": "214291",
@@ -1381,10 +1503,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214492"],
+      "previous_courses": [
+        "214492"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về xử lý ảnh, nhận diện đối tượng và các thuật toán thị giác máy tính, giúp sinh viên phát triển kỹ năng lập trình ứng dụng xử lý ảnh và phân tích hình ảnh."
   },
   {
     "course_code": "214379",
@@ -1409,10 +1534,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214370"],
+      "previous_courses": [
+        "214370"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Đảm bảo chất lượng và kiểm thử phần mềm' trang bị cho sinh viên kiến thức về quy trình kiểm thử, kỹ thuật kiểm thử phần mềm, ngôn ngữ kiểm thử tự động và sử dụng công cụ kiểm thử. Môn học giúp sinh viên phát triển kỹ năng viết tài liệu và suy luận tình huống kiểm thử."
   },
   {
     "course_code": "214388",
@@ -1437,10 +1565,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214462"],
+      "previous_courses": [
+        "214462"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giới thiệu các công nghệ và công cụ lập trình Front End, bao gồm HTML, CSS, JavaScript, giúp sinh viên phát triển kỹ năng thiết kế giao diện người dùng tương tác và thân thiện."
   },
   {
     "course_code": "214485",
@@ -1465,10 +1596,14 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214442", "214492"],
+      "previous_courses": [
+        "214442",
+        "214492"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về khai thác dữ liệu, các kỹ thuật và công cụ Data Mining, giúp sinh viên phát triển kỹ năng phân tích và rút ra thông tin từ tập dữ liệu lớn."
   },
   {
     "course_code": "214490",
@@ -1493,10 +1628,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214492"],
+      "previous_courses": [
+        "214492"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học tập trung vào phân tích và xử lý dữ liệu lớn, bao gồm các công nghệ và phương pháp phân tích, giúp sinh viên nắm vững kỹ năng làm việc với Big Data."
   },
   {
     "course_code": "214292",
@@ -1521,10 +1659,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214241"],
+      "previous_courses": [
+        "214241"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về an ninh mạng, các mối đe dọa và biện pháp bảo vệ hệ thống thông tin, giúp sinh viên phát triển kỹ năng bảo mật và quản lý rủi ro trong môi trường mạng."
   },
   {
     "course_code": "214293",
@@ -1549,10 +1690,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214274"],
+      "previous_courses": [
+        "214274"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học hướng dẫn sinh viên thực hành lập trình ứng dụng trên thiết bị di động, bao gồm phát triển ứng dụng cho Android/iOS, giúp sinh viên nắm vững quy trình phát triển ứng dụng di động."
   },
   {
     "course_code": "214383",
@@ -1577,10 +1721,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214370"],
+      "previous_courses": [
+        "214370"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học \"Quản lý Dự án Phần mềm\" cung cấp kiến thức về quy trình quản lý dự án công nghệ thông tin, bao gồm lập kế hoạch, theo dõi phát triển và đánh giá chất lượng phần mềm. Sinh viên sẽ sử dụng các công cụ kiểm thử tự động và kỹ thuật viết tài liệu để thực hành."
   },
   {
     "course_code": "214491",
@@ -1605,10 +1752,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214442"],
+      "previous_courses": [
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giới thiệu về kho dữ liệu (Data Warehouse), thiết kế và triển khai hệ thống kho dữ liệu, giúp sinh viên phát triển kỹ năng quản lý và phân tích dữ liệu lớn."
   },
   {
     "course_code": "214290",
@@ -1633,10 +1783,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214252"],
+      "previous_courses": [
+        "214252"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức về Internet of Things (IoT), các công nghệ và ứng dụng IoT, giúp sinh viên phát triển kỹ năng thiết kế và triển khai hệ thống IoT trong thực tế."
   },
   {
     "course_code": "214471",
@@ -1661,10 +1814,13 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214442"],
+      "previous_courses": [
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Hệ thống thông tin quản lý' trang bị cho sinh viên kiến thức về các loại hệ thống thông tin, phương pháp quản lý phần cứng, phần mềm, dữ liệu và mạng. Sinh viên sẽ học phân tích, thiết kế hệ thống thông tin và ứng dụng trong doanh nghiệp, cùng với các công cụ thực hành liên quan."
   },
   {
     "course_code": "214483",
@@ -1689,10 +1845,14 @@
       "semester": 1
     },
     "requirements": {
-      "previous_courses": ["214462", "214442"],
+      "previous_courses": [
+        "214462",
+        "214442"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học giới thiệu các khái niệm cơ bản về thương mại điện tử, bao gồm mô hình kinh doanh, thanh toán trực tuyến và marketing số, giúp sinh viên nắm vững kỹ năng phát triển và quản lý các nền tảng thương mại điện tử."
   },
   {
     "course_code": "214286",
@@ -1717,10 +1877,14 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214352", "214441"],
+      "previous_courses": [
+        "214352",
+        "214441"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học chuyên sâu về ngôn ngữ lập trình Java, bao gồm cú pháp, lập trình hướng đối tượng và phát triển ứng dụng, giúp sinh viên nâng cao kỹ năng lập trình và giải quyết vấn đề."
   },
   {
     "course_code": "214374",
@@ -1745,10 +1909,13 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214462"],
+      "previous_courses": [
+        "214462"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học 'Chuyên đề Web' trang bị cho sinh viên kiến thức về Web Services, bao gồm kiến trúc dịch vụ, XML, SOAP, WSDL, UDDI và WSIF. Sinh viên sẽ thực hành lập trình phân tán thông qua các ví dụ cụ thể và công nghệ mới trong lĩnh vực này."
   },
   {
     "course_code": "214984",
@@ -1776,7 +1943,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học yêu cầu sinh viên thực hiện một dự án chuyên ngành, từ khâu lên ý tưởng đến triển khai, giúp phát triển kỹ năng làm việc nhóm và ứng dụng kiến thức vào thực tiễn."
   },
   {
     "course_code": "214987",
@@ -1804,7 +1972,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Khóa luận tốt nghiệp yêu cầu sinh viên nghiên cứu và trình bày một đề tài chuyên sâu, giúp phát triển kỹ năng nghiên cứu, phân tích và tổng hợp thông tin."
   },
   {
     "course_code": "214988",
@@ -1832,7 +2001,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Tiểu luận tốt nghiệp yêu cầu sinh viên viết một bài luận về một chủ đề liên quan đến ngành học, giúp rèn luyện kỹ năng viết và trình bày ý tưởng một cách logic."
   },
   {
     "course_code": "214989",
@@ -1860,7 +2030,8 @@
       "previous_courses": [],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học cung cấp kiến thức và kỹ năng khởi nghiệp, bao gồm lập kế hoạch kinh doanh, quản lý tài chính và phát triển sản phẩm, giúp sinh viên chuẩn bị cho việc khởi nghiệp."
   },
   {
     "course_code": "214991",
@@ -1885,9 +2056,12 @@
       "semester": 2
     },
     "requirements": {
-      "previous_courses": ["214370"],
+      "previous_courses": [
+        "214370"
+      ],
       "prerequisites": [],
       "parallel_courses": []
-    }
+    },
+    "description": "Môn học thực tập doanh nghiệp giúp sinh viên áp dụng kiến thức vào thực tiễn tại các doanh nghiệp, phát triển kỹ năng làm việc và hiểu biết về môi trường làm việc chuyên nghiệp."
   }
 ]

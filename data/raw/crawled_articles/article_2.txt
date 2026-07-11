@@ -1,0 +1,6 @@
+Source: https://aws.amazon.com/blogs/aws/feed/
+Title: Accelerate your infrastructure deployments by up to 4x with AWS CloudFormation Express mode
+Link: https://aws.amazon.com/blogs/aws/accelerate-your-infrastructure-deployments-by-up-to-4x-with-aws-cloudformation-express-mode/
+Date: Tue, 30 Jun 2026 21:30:33 +0000
+Content:
+AWS CloudFormation speeds up infrastructure deployment with Express mode, enabling AI agents and developers to receive deployment confirmation in seconds and iterate faster. Available in all commercial Regions at no additional cost.

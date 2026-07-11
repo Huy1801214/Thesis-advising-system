@@ -1,0 +1,6 @@
+Source: https://aws.amazon.com/blogs/aws/feed/
+Title: Upgrade Amazon EKS clusters with confidence using Kubernetes version rollbacks
+Link: https://aws.amazon.com/blogs/aws/upgrade-amazon-eks-clusters-with-confidence-using-kubernetes-version-rollbacks/
+Date: Wed, 01 Jul 2026 17:20:30 +0000
+Content:
+Learn how Kubernetes version rollbacks for Amazon EKS let you reverse cluster upgrades within seven days. This new feature provides a safety net for upgrade failures—no cluster rebuilds required—turning Kubernetes version upgrades into a reversible, low-risk operation.

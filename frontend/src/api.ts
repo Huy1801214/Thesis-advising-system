@@ -203,6 +203,9 @@ export type StudentProfileResponse = {
   data?: {
     gpa: string | number;
     total_passed: number;
+    major?: string;
+    target_career?: string;
+    interests?: string;
   };
 };
 
@@ -217,6 +220,39 @@ export async function getStudentProfile(token: string): Promise<StudentProfileRe
     throw new Error(await parseError(response, "Không thể tải thông tin bảng điểm."));
   }
   return (await response.json()) as StudentProfileResponse;
+}
+
+export async function updateStudentProfile(
+  token: string,
+  major: string | null,
+  targetCareer: string | null,
+  interests: string | null
+): Promise<{ status: string; message: string; data?: any }> {
+  const response = await fetch(`${API_BASE_URL}/api/grag/student-profile/update`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ major, target_career: targetCareer, interests }),
+  });
+  if (response.status === 401) {
+    throw new Error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+  }
+  if (!response.ok) {
+    throw new Error(await parseError(response, "Không thể cập nhật hồ sơ cá nhân."));
+  }
+  return await response.json();
+}
+
+export async function getCareersList(token: string): Promise<{ status: string; careers: string[] }> {
+  const response = await fetch(`${API_BASE_URL}/api/grag/careers`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error("Không thể tải danh sách ngành nghề tuyển dụng.");
+  }
+  return await response.json();
 }
 
 export async function deleteStudentProfile(token: string): Promise<{ status: string; message: string }> {

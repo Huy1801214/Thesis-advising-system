@@ -1,0 +1,7 @@
+Source: https://devblogs.microsoft.com/python/feed/
+Title: Python Environments Extension for VS Code- April Update
+Link: https://devblogs.microsoft.com/python/python-in-visual-studio-code-april-2026-release/
+Date: Mon, 27 Apr 2026 20:07:30 +0000
+Content:
+The April 2026 release update includes the Python Environments extension... Keep on reading to learn more!
+The post Python Environments Extension for VS Code- April Update appeared first on Microsoft for Python Developers Blog.

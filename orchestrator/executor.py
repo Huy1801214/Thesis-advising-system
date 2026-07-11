@@ -3,6 +3,8 @@ from typing import Dict, Any
 from workers.rag_worker import RAGEngine
 from workers.grag_worker import GRAGEngine
 from workers.llm_extractor import EntityExtractor
+from orchestrator.student_analyst import StudentAnalysisAgent
+from orchestrator.reasoning_agent import KnowledgeReasoningAgent
 
 GLOBAL_DB_SEMAPHORE = asyncio.Semaphore(30)
 TASK_TIMEOUT = 15.0
@@ -19,6 +21,8 @@ class TaskExecutor:
         self.rag_agent = RAGEngine()
         self.grag_agent = GRAGEngine()
         self.extractor = EntityExtractor()
+        self.student_analyst = StudentAnalysisAgent()
+        self.reasoning_agent = KnowledgeReasoningAgent()
 
     async def _execute_with_retry(self, func, *args, max_retries=2, **kwargs):
         last_exception = None
@@ -84,6 +88,17 @@ class TaskExecutor:
                 elif task.task_type == "RAG":
                     res = await self._execute_with_retry(self.rag_agent.search_and_answer, task.query_intent) 
                     result_data["raw_data"] = f"--- Dữ liệu từ Sổ tay ({task.query_intent}) ---\n{res}"
+                    
+                elif task.task_type == "CAREER_ADVISE":
+                    student_profile = await self.student_analyst.analyze_student(mssv, student_data)
+                    res = await self.reasoning_agent.reason_and_recommend(
+                        question=task.query_intent,
+                        profile=student_profile,
+                        passed_courses=student_data.get("passed_courses", []) if student_data else []
+                    )
+                    if not student_data:
+                        res = "[⚠️ Lưu ý: Bạn chưa tải lên bảng điểm nên lộ trình dưới đây là gợi ý đầy đủ chung. Hãy tải bảng điểm lên để có tư vấn cá nhân hóa chính xác nhất!]\n\n" + res
+                    result_data["raw_data"] = res
                     
             except asyncio.TimeoutError:
                 result_data["raw_data"] = f"[Error] Agent {task.task_type} quá thời gian xử lý."

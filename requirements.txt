@@ -8,6 +8,9 @@ python-multipart
 email-validator>=2.0.0
 fastembed
 openpyxl
+markitdown
+pandas
+numpy
 # --- Security & Auth ---
 python-jose[cryptography]
 passlib[bcrypt]
